@@ -1,0 +1,849 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ui_page">
+    <sys_ui_page action="INSERT_OR_UPDATE">
+        <category>general</category>
+        <client_script><![CDATA[String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.replace(new RegExp(search, 'g'), replacement);
+};
+
+Date.prototype.getISODate = function(){
+	
+	var date = this;
+	date = new Date(date.getTime() - 14400000);
+	date = date.toISOString();
+	date = date.split('T');
+	date = date[0];
+	return date;
+};
+
+
+var green = '#09C230';
+var red = '#FF0000';
+var yellow = '#FFCD00';
+var grey = '#EDEDED';
+
+var watcher = angular.module('watcher',[]);
+
+watcher.controller('watcherCtrl',['$interval','$scope','$http','monitorMaintainer','datePicker', function($interval,$scope,$http,monitorMaintainer,datePicker){
+	
+	var maintenance = false;
+	
+	if(maintenance && !g_user.hasRole('admin')){
+		jQuery('body').html('<div id="maintenance_box"><p id="maintenance_message">Site is under maintenance</p></div>');
+		return;
+	}
+	
+	$scope.dba_admin = g_user.hasRole('dba');
+	
+	$scope.date = new Date();
+	
+	/******** WATCH DATE CHANGES *********/
+	$scope.$watch('date',function(newVal,oldVal,scope){
+		if($scope.prod_monitors.length == 0){
+			console.log('No monitors');
+			return;
+		}
+		var today = new Date();
+		if(newVal.getISODate() != today.getISODate()){
+			
+			if($scope.monitor_interval){
+				
+				$interval.cancel($scope.monitor_interval);
+				$scope.monitor_interval = null;
+			}
+			for(var i = 0; i < $scope.prod_monitors.length; i++){
+				datePicker.changeMonitor($scope.prod_monitors[i], newVal, scope);
+			}
+	
+		}else{
+			
+			$scope.getMonitors();
+			$scope.monitor_interval = $interval($scope.getMonitors,5000);
+		}
+		
+	});
+	/******** WATCH DATE CAHNGES *********/
+	
+	$scope.prod_monitors = [];
+
+	$scope.getMonitors = function(){
+		
+		$http({
+			method: 'GET',
+			url:"api/now/table/x_kasp_watcher_monitors?sysparm_query=application=Xcenter^environment=production^ORDERBYserver",
+			headers:{
+				'X-UserToken': window.g_ck.toString()
+			}
+		}).success(function(data, status){
+			
+			var monitor = {};
+			
+			for(var i = 0; i < data.result.length; i++){
+				
+				monitor = monitorMaintainer.format(data.result[i]);
+				monitorMaintainer.updateMonitor(monitor,$scope.prod_monitors);
+			
+			}	
+			
+		}).error(function(data, status){
+			
+		});
+	};
+	
+	$scope.getMonitors();
+	$scope.monitor_interval = $interval($scope.getMonitors,5000);
+	
+}
+
+]);
+
+watcher.directive('historyMonitor',['historyLoader','$interval',function(historyLoader,$interval){
+	
+	var temp = gel('history_template').innerHTML;
+	temp = temp.replaceAll("//",'');
+	
+	var runHistoryInterval = function(func){
+		func();
+		$interval(func, 6000);
+	};
+	
+	var link = function(scope,element,attrs){
+		
+		var setHistory = function(hist){
+			
+			var color;
+			var historyBox;
+			var hour;
+			for(var i = 0; i < 24; i++){
+				if(hist[i]){
+					hour = hist[i].hour;
+					historyBox = element.children('#'+attrs.server+'_history_'+hour);
+					historyBox.children('.history-content').html(hist[i].requests);
+				
+					color = (hist[i].status == -1)? yellow:green;
+					color = (hist[i].status == 0)? red:color;
+					color = (hist[i].status == '')?grey:color;
+				
+					historyBox.css('background',color);
+				}else{
+					hour = (i < 10)? "0"+i:i;
+					historyBox = element.children('#'+attrs.server+'_history_'+hour);
+					historyBox.children('.history-content').html('');
+					color = grey;
+					historyBox.css('background',color);
+				}
+				
+			}
+			
+		};
+		
+		var loadHistory = function(){
+			
+			var date = scope.date.getISODate();
+			historyLoader.getConsolidatedHistory(attrs.server,date,setHistory);
+			
+		};
+		runHistoryInterval(loadHistory);
+		
+	};
+	
+	return {
+		
+		replace: true,
+		restrict: 'E',
+		link: link,
+		template: temp
+	};
+	
+}]);
+
+
+watcher.directive('serverMonitor',['$interval','historyLoader', function($interval,historyLoader){
+	
+	
+	var temp = gel('monitor_template').innerHTML;
+	temp = temp.replaceAll("//",'');
+	
+	
+	var link = function(scope,element,attrs){
+		
+		//Adjust history box height
+		$interval(function(){
+			var detailsheight = element.find('.details-container').height();
+			element.find('.hourly-container').css('height',detailsheight);
+		},500);			
+	};
+
+	return {
+		
+		replace: true,
+		restrict: 'E',
+		link: link,
+		template: temp
+	};
+	
+}]);
+
+watcher.factory('historyLoader',['$http',function($http){
+	
+	return{
+		getConsolidatedHistory:function(server,date,setHistory){
+						
+			$http({
+				method:'GET',
+				url:"api/now/table/x_kasp_watcher_consolidated_history?"+ "sysparm_query=date="+date+ "^server="+server+"^ORDERBYsys_created_on",
+				headers:{
+					'X-UserToken': window.g_ck.toString(),
+					'Accept':'application/json',
+					'Content-Type':'application/json'					
+				}
+			}).success(function(data,status){
+				return setHistory(data.result);
+			}).error(function(data,status){
+				return data;
+			});
+			
+		},
+		
+		getMonitorDetailedHistory: function(date,server,returnResult){
+			
+			$http({
+				method:'GET',
+				url:"api/now/table/x_kasp_watcher_monitor_history?"+ "sysparm_query=date="+date+ "^server="+server+"^ORDERBYsys_created_on",
+				headers:{
+					'X-UserToken': window.g_ck.toString(),
+					'Accept':'application/json',
+					'Content-Type':'application/json'					
+				}
+			}).success(function(data,status){
+				
+				return returnResult(data.result);
+			}).error(function(data,status){});
+		}
+			
+	};
+	
+}]);
+
+
+watcher.factory('monitorMaintainer',[function(){	
+	
+	var statusHandler = function(server,status){
+		var color = (status == 0) ? '#FF0000':'#42FF00';
+		color = (status == -1) ? '#FFC100':color;
+		
+		jQuery('#'+server).find('.image-box').css('transition','background .3s ease-out').css('background-color',color);
+		
+		setTimeout(function(){
+			jQuery('#'+server).find('.image-box').css('transition','background 1.5s ease-in').css('background-color','white');	
+			
+		},'200');
+		
+	};
+	
+	return{
+		
+		updateMonitor: function(monitor,scopedMonitors){
+			if(!monitor){
+				return;
+			}
+			var monitorToUpdate;
+			
+			for(var i = 0; i < scopedMonitors.length; i++){
+				if(monitor.server == scopedMonitors[i].server){
+					monitorToUpdate = scopedMonitors[i];
+					break;
+				}
+			}
+			
+			if(monitorToUpdate){
+				
+				if(monitorToUpdate.last_check != monitor.last_check){
+					statusHandler(monitorToUpdate.server,monitorToUpdate.status);
+				}
+				
+				for(var prop in monitor){
+					monitorToUpdate[prop] = monitor[prop];
+				}
+			}else{
+				scopedMonitors.push(monitor);
+			}
+			
+		},
+		
+		format:function(monitor){
+			
+			var formatted = {
+				server:'',
+				status: '',
+				//avg_db_req_time:'',
+				//total_db_reqs: '',				
+				ram: {
+					free:'',
+					total:'',
+					fill_pct:''
+				},
+				cpu: {
+					idle_pct:'',
+					util_pct:'',
+					fill_pct:''
+				},
+				drives:[],
+				network:{					
+					bps_rec:'',
+					bps_sent:'',
+					bw:''
+				},
+				os:'',
+				//cert_exp:'',
+				last_check:'',
+				//group:'',
+				sys_id:''
+				
+			};
+			try{
+				//Parse JSON fields
+				monitor.drives = JSON.parse(monitor.drives);
+				monitor.ram = JSON.parse(monitor.ram);
+				monitor.cpu = JSON.parse(monitor.cpu);
+				monitor.os = JSON.parse(monitor.os);
+				monitor.network = JSON.parse(monitor.network);
+
+				formatted.server = monitor.server;
+				formatted.status = monitor.status;
+				//formatted.avg_db_req_time = monitor.avg_db_request_time;
+				//formatted.total_db_reqs = monitor.db_requests;
+				formatted.ram.free = (monitor.ram.free_ram/(1024*1024)).toFixed(2) + "GB";
+				formatted.ram.total = (monitor.ram.total_ram/(1024*1024)).toFixed(2) + "GB";
+				formatted.ram.fill_pct = ((monitor.ram.total_ram - monitor.ram.free_ram)/monitor.ram.total_ram)*100;
+				formatted.cpu.idle_pct = monitor.cpu.idle_time;
+				formatted.cpu.util_pct = 100 - monitor.cpu.idle_time;
+				formatted.cpu.fill_pct = 100 - monitor.cpu.idle_time;
+
+				for(var i = 0; i < monitor.drives.length; i++){
+					formatted.drives.push({
+						letter:monitor.drives[i].letter,
+						total_size: (monitor.drives[i].total_size/(1024*1024*1024)).toFixed(2) + "GB",
+						free_disk: (monitor.drives[i].free_disk/(1024*1024*1024)).toFixed(2) + "GB",
+						fill_pct: ((monitor.drives[i].total_size - monitor.drives[i].free_disk)/monitor.drives[i].total_size)*100
+
+					});
+				}
+
+				//formatted.network.bps_rec = monitor.network.bytes_rec_psec;
+				//formatted.network.bps_sent = monitor.network.bytes_sent_psec;
+				//formatted.network.bw = monitor.network.bandwidth;
+				formatted.os = monitor.os.name_ver;
+				//formatted.cert_exp = monitor.cert_expiration;
+				formatted.last_check = monitor.last_check;
+				//formatted.group = monitor.group;
+				formatted.sys_id = monitor.sys_id;
+			}catch(Excep){
+				console.log("Error Parsing Monitor " + Excep);
+				return null;
+			}
+			return formatted;
+		}
+	};
+}]);
+
+watcher.factory('datePicker',['historyLoader','monitorMaintainer',function(historyLoader,monitorMaintainer){
+	
+	return{
+		
+		changeMonitor:function(monitor,newDate,scope){
+			
+			var date = new Date(newDate);
+			date = date.getISODate();
+			var server;
+			
+			var processDetailHistory = function(result){
+				result = result[0];
+				var newMonitor = monitorMaintainer.format(result);
+				monitorMaintainer.updateMonitor(newMonitor,scope.prod_monitors);	
+			};
+			
+			historyLoader.getMonitorDetailedHistory(date,monitor.server,processDetailHistory);
+		}
+		
+	};
+}]);
+]]></client_script>
+        <description/>
+        <direct>false</direct>
+        <endpoint>x_kasp_watcher_xcenter_monitoring_page.do</endpoint>
+        <html><![CDATA[<?xml version="1.0" encoding="utf-8" ?>
+<j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
+	<head>
+
+		<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"/>
+		
+		<style>
+			
+			input[type=date]::-webkit-inner-spin-button {
+				-webkit-appearance: none;
+				display: none;
+				text-aligned: center;
+			}
+			#primary_group{
+				background-color: #0078FF;
+				
+			}
+			#internal_group{
+				background-color: #009902;
+				margin: 0 0 1em 0;
+			}
+			#external_group{
+				background-color: #2D5687;
+				margin: 0 0 1em 0;
+			}
+			#available_group{
+				background-color: #9D9D9D;
+			}
+			
+			.group-label{
+				font-family:Calibri;
+				font-weight:bold;
+				font-size: 25px;
+				color:white;
+			}
+			
+			.server-label{
+				font-family:Calibri;
+				font-weight:bold;
+				font-size: 15px;				
+			}
+			
+			.odd-five{
+				width: 20%;
+			}
+			
+			@media screen and (max-width: 799px) {
+			  .odd-five {
+				width: 100%;
+			  }
+			}
+			html, body {
+			  height: 100%;
+			}
+
+			div {
+			  margin: 0;
+			}
+			
+			.drive-box{
+				min-height: 104.04px;
+			}
+			.detail-title {
+			  font-family: "Calibri";
+			  font-size: 0.9em;
+			  font-weight: bold;
+			}
+
+			.detail-label {
+			  font-family: "Calibri";
+			  font-size: 0.85em;
+			}
+
+			.group-box {
+			  padding: 1em 0.5em 1em 0.5em;
+			  border: solid black 0.1em;
+			  box-shadow: 4px 4px 5px grey;
+			}
+			.group-box div {
+			  padding: 0;
+			}
+			
+			.group-box .server-box {
+			  text-align: center;
+			  background-color: white;
+			  border: solid black 0.1em;
+			  <!--min-height: 493px;-->
+			}
+			.group-box .server-box .details-container .image-box {
+			  border-bottom: solid grey 0.1em;
+			  -webkit-border-radius: 0.3em;
+			  -moz-border-radius: 0.3em;
+			  -ms-border-radius: 0.3em;
+			  border-radius: 0.3em;
+			  padding-bottom: 1em;
+			}
+			.group-box .server-box .details-container .details .fillbar {
+			  margin: 0.2em 0 0em 0;
+			  border: solid black 0.1em;
+			}
+			.group-box .server-box .details-container .details .full{
+			  min-height: 0.4em;
+			  background: #76B4FF;
+			  background: -webkit-linear-gradient(#76B4FF, #005ECF);
+			  background: -o-linear-gradient(#76B4FF, #005ECF);
+			  background: -moz-linear-gradient(#76B4FF, #005ECF);
+			  background: linear-gradient(#76B4FF, #005ECF);
+			}
+			.group-box .server-box .details-container .details .empty {
+			  min-height: 0.4em;
+			  max-width: 100%;
+			  min-width: 100%;
+			  background-color: #EEEEEE;
+			}
+			.group-box .server-box .details-container .details .detail-col .drive-separator {
+			  min-height: 1em;
+			  max-height: 1em;
+			}
+			.group-box .server-box .details-container .details .detail-col .stat-box {
+			  text-align: left;
+			  padding: 0.2em 0.5em 0.4em 0.5em;
+			  border-bottom: solid grey 0.1em;
+			}
+			.group-box .server-box .details-container .details .detail-col .stat-box p {
+			  margin: 0;
+			}
+			.group-box .server-box .details-container .details .detail-col .stat-box .detail-text {
+			  text-align: center;
+			}
+			.group-box .server-box .details-container .details .detail-col .stat-box-split {
+			  min-height: 66px;
+			}
+			@media screen and (max-width: 318px) {
+			  .group-box .server-box .details-container .details .detail-col .stat-box-split {
+				width: 100%;
+			  }
+			}
+			.group-box .server-box .details-container .details .detail-col .stat-box-left {
+			  border-right: solid grey 0.1em;
+			}
+			@media screen and (max-width: 1199px) and (min-width: 992px) {
+			  .group-box .server-box .details-container .details .detail-col .stat-box-left {
+				border-right: none;
+			  }
+			}
+			@media screen and (max-width: 318px) {
+			  .group-box .server-box .details-container .details .detail-col .stat-box-left {
+				border-right: none;
+			  }
+			}
+			
+			
+			.group-box .server-box .hourly-container {
+			  border-left: solid grey 0.1em;
+			}
+			.group-box .server-box .hourly-container .history-box {
+			  border: solid white 0.05em;
+			  background-color: #EDEDED;
+			  color: white;
+			  font-size: 1em;
+			  font-weight: bold;
+			  min-height: calc(100%/24);
+			}
+			.group-box .server-box .hourly-container .history-box .hour-label {
+			  color: black;
+			  text-align: left;
+			  background-color: white;
+			  border: solid #CECECE 0.2em;
+			  border-right: solid #3059FD 0.25em;
+			  font-size: 0.6em;
+			  min-width: 13px;
+			  max-width: 13px;
+			}
+			.group-box .server-box .hourly-container .history-box .history-content {
+				padding-top: 0.2em;
+				color:white;
+			    font-family: Calibri;
+				font-size: 0.9em;
+			}
+			
+			.group-box .server-box .buttons-container button {
+				width: 100%;
+			}
+
+		</style>
+		
+		<script id="monitor_template" type="text/html">
+
+			<div id='{{mon.server}}' class='server-box col-lg-12 col-md-12 col-sm-12 col-xs-12'>    
+				<div class='details-container col-lg-9 col-md-9 col-xs-9 col-xs-9 '>
+					<div class='image-box col-lg-12 col-md-12 col-sm-12 col-xs-12'>
+						<p class='server-label'>{{mon.server}}</p>
+						
+						<img ng-show="mon.status == -1" class='status-image' src="server.png" width="50" height="80"/>
+						<img ng-show="mon.status == 200" class='status-image' src="greenServer.png" width="50" height="80"/> 
+						<img ng-show="mon.status == 0" class='status-image' src="redServer.png" width="50" height="80"/> 
+						
+					</div>
+
+					<div class='col-lg-12 col-md-12 col-sm-12 col-xs-12 details'>
+						<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 detail-col detail-col-left">
+							<!--
+							<div class='col-lg-6 col-md-12 col-sm-6 col-xs-6 stat-box stat-box-left stat-box-split'>
+								<div class="detail-text">
+									<p class='detail-title'>Average DB Request Time</p> 
+									<p class="detail-label">{{mon.avg_db_req_time}} secs</p>        
+								</div>                                        
+							</div>            
+							<div class='col-lg-6 col-md-12 col-sm-6 col-xs-6 stat-box detail-text stat-box-split'>
+								<div class="detail-text">
+									<p class='detail-title'>Total DB Requests</p> 
+									<p class="detail-label">{{mon.total_db_reqs}}</p>    
+								</div>                                        
+							</div>
+							-->
+							<div class='col-lg-12 col-md-12 col-sm-12 col-xs-12 stat-box'>
+								<p class='detail-title'>RAM</p> 
+								<div class='fillbar col-lg-12 col-md-12 col-sm-12 col-xs-12'>
+									<div class='empty' title="free">
+										<div class='full' title="full" style="max-width:{{mon.ram.fill_pct}}%">										 	
+										</div>
+									</div>
+								</div>
+								<p class="detail-label">{{mon.ram.free}} free of {{mon.ram.total}}</p>
+							</div>
+							<div class='col-lg-12 col-md-12 col-sm-12 col-xs-12 stat-box'>
+								<p class='detail-title'>CPU</p>
+								<div class='fillbar col-lg-12 col-md-12 col-sm-12 col-xs-12'>
+									<div class='empty' title="free" >
+										<div class='full' title="full" style="max-width:{{mon.cpu.fill_pct}}%">										 	
+										</div>
+									</div>
+								</div> 
+								<p class="detail-label">{{mon.cpu.util_pct}}% <em>(Utilization)</em></p>
+							</div>
+							<div class='col-lg-12 col-md-12 col-sm-12 col-xs-12 stat-box drive-box'>
+								<p class='detail-title'>Drives</p>
+
+								<div class='col-lg-12 col-md-12 col-sm-12 col-xs-12' ng-repeat='drive in mon.drives'>                                            
+									<p class="detail-label">{{drive.letter}}</p>
+									<div class='fillbar col-lg-12 col-md-12 col-sm-12 col-xs-12'>
+										<div class='empty' title="free">  
+											<div class='full' title="full" style="max-width:{{drive.fill_pct}}%">
+											</div>
+										</div>
+									</div>
+									<p class="detail-label">{{drive.free_disk}} free of {{drive.total_size}}</p>
+								</div>
+								
+							</div> 
+							<div class='col-lg-12 col-md-12 col-sm-12 col-xs-12 stat-box'>
+								<div class=''>
+									<p class='detail-title'>Network</p> 
+									<p class="detail-label">Sent/Rec: {{mon.network.bps_sent}}/{{mon.network.bps_rec}} bps</p>
+									<p class="detail-label">BW: {{mon.network.bw}} Mbps</p>                                            
+								</div>
+							</div>
+							<div class='col-lg-12 col-md-12 col-sm-12 col-xs-12 stat-box'>
+								<div class=''>                                        
+									<p class='detail-title'>OS</p> 
+									<p class="detail-label">{{mon.os}}</p>
+								</div>
+							</div>
+							<!--
+							<div class='col-lg-12 col-md-12 col-sm-12 col-xs-12 stat-box'>
+								<div class=''>                                                                                    
+									<p class='detail-title'>Certificate Expiration</p>
+									<p class="detail-label">{{mon.cert_exp}}</p>
+								</div>
+							</div>
+							-->
+							<div class='col-lg-12 col-md-12 col-sm-12 col-xs-12 stat-box'>
+							
+								<div class=''>                                                                                    
+									<p class='detail-title'>Last URL Check</p>
+									<p class="detail-label">{{mon.last_check}}</p>
+								</div>
+							</div>
+							
+						</div>
+
+					</div> 
+
+				</div>
+				   
+				<history-monitor server="{{mon.server}}"></history-monitor>
+				<!--
+				<div class='col-lg-12 col-md-12 col-sm-12 col-xs-12 buttons-container' ng-show="dba_admin">
+					<button class='btn btn-md btn-default'>Restart Application</button>
+					<button class='btn btn-md btn-default'>Error Log</button>
+				</div>    
+			    -->
+		   </div>
+
+		</script>
+		
+		<script id="history_template" type="text/html">
+			<div class='col-lg-3 col-md-3 col-sm-3 col-xs-3 hourly-container'>
+				
+				
+				<div id='{{mon.server}}_history_00' class='col-lg-12 col-md-12 col-sm-12 col-xs-12 history-box'>
+					<div class='col-lg-3 col-md-3 col-sm-3 col-xs-3 hour-label'>00</div>
+					<div class='col-lg-5 col-md-5 col-sm-5 col-xs-5 history-content'></div>
+					<div class='col-lg-1 col-md-1 col-sm-1 col-xs-1 hour-status'></div>
+				</div>
+				<div id='{{mon.server}}_history_01' class='col-lg-12 col-md-12 col-sm-12 col-xs-12 history-box'>
+					<div class='col-lg-3 col-md-3 col-sm-3 col-xs-3 hour-label'>01</div>
+					<div class='col-lg-5 col-md-5 col-sm-5 col-xs-5 history-content'></div>
+					<div class='col-lg-1 col-md-1 col-sm-1 col-xs-1 hour-status'></div>
+				</div>
+				<div id='{{mon.server}}_history_02' class='col-lg-12 col-md-12 col-sm-12 col-xs-12 history-box'>
+					<div class='col-lg-3 col-md-3 col-sm-3 col-xs-3 hour-label'>02</div>
+					<div class='col-lg-5 col-md-5 col-sm-5 col-xs-5 history-content'></div>
+					<div class='col-lg-1 col-md-1 col-sm-1 col-xs-1 hour-status'></div>
+				</div>
+				<div id='{{mon.server}}_history_03' class='col-lg-12 col-md-12 col-sm-12 col-xs-12 history-box'>
+					<div class='col-lg-3 col-md-3 col-sm-3 col-xs-3 hour-label'>03</div>
+					<div class='col-lg-5 col-md-5 col-sm-5 col-xs-5 history-content'></div> 
+					<div class='col-lg-1 col-md-1 col-sm-1 col-xs-1 hour-status'></div>
+				</div>
+				<div id='{{mon.server}}_history_04' class='col-lg-12 col-md-12 col-sm-12 col-xs-12 history-box'>
+					<div class='col-lg-3 col-md-3 col-sm-3 col-xs-3 hour-label'>04</div>
+					<div class='col-lg-5 col-md-5 col-sm-5 col-xs-5 history-content'></div> 
+					<div class='col-lg-1 col-md-1 col-sm-1 col-xs-1 hour-status'></div>
+				</div>
+				<div id='{{mon.server}}_history_05' class='col-lg-12 col-md-12 col-sm-12 col-xs-12 history-box'>
+					<div class='col-lg-3 col-md-3 col-sm-3 col-xs-3 hour-label'>05</div>
+					<div class='col-lg-5 col-md-5 col-sm-5 col-xs-5 history-content'></div> 
+					<div class='col-lg-1 col-md-1 col-sm-1 col-xs-1 hour-status'></div>
+				</div>
+				<div id='{{mon.server}}_history_06' class='col-lg-12 col-md-12 col-sm-12 col-xs-12 history-box'>
+					<div class='col-lg-3 col-md-3 col-sm-3 col-xs-3 hour-label'>06</div>
+					<div class='col-lg-5 col-md-5 col-sm-5 col-xs-5 history-content'></div> 
+					<div class='col-lg-1 col-md-1 col-sm-1 col-xs-1 hour-status'></div>
+				</div>
+				<div id='{{mon.server}}_history_07' class='col-lg-12 col-md-12 col-sm-12 col-xs-12 history-box'>
+					<div class='col-lg-3 col-md-3 col-sm-3 col-xs-3 hour-label'>07</div>
+					<div class='col-lg-5 col-md-5 col-sm-5 col-xs-5 history-content'></div> 
+					<div class='col-lg-1 col-md-1 col-sm-1 col-xs-1 hour-status'></div>
+				</div>
+				<div id='{{mon.server}}_history_08' class='col-lg-12 col-md-12 col-sm-12 col-xs-12 history-box'>
+					<div class='col-lg-3 col-md-3 col-sm-3 col-xs-3 hour-label'>08</div>
+					<div class='col-lg-5 col-md-5 col-sm-5 col-xs-5 history-content'></div> 
+					<div class='col-lg-1 col-md-1 col-sm-1 col-xs-1 hour-status'></div>
+				</div>
+				<div id='{{mon.server}}_history_09' class='col-lg-12 col-md-12 col-sm-12 col-xs-12 history-box'>
+					<div class='col-lg-3 col-md-3 col-sm-3 col-xs-3 hour-label'>09</div>
+					<div class='col-lg-5 col-md-5 col-sm-5 col-xs-5 history-content'></div> 
+					<div class='col-lg-1 col-md-1 col-sm-1 col-xs-1 hour-status'></div>
+				</div>
+				<div id='{{mon.server}}_history_10' class='col-lg-12 col-md-12 col-sm-12 col-xs-12 history-box'>
+					<div class='col-lg-3 col-md-3 col-sm-3 col-xs-3 hour-label'>10</div>
+					<div class='col-lg-5 col-md-5 col-sm-5 col-xs-5 history-content'></div> 
+					<div class='col-lg-1 col-md-1 col-sm-1 col-xs-1 hour-status'></div>
+				</div>
+				<div id='{{mon.server}}_history_11' class='col-lg-12 col-md-12 col-sm-12 col-xs-12 history-box'>
+					<div class='col-lg-3 col-md-3 col-sm-3 col-xs-3 hour-label'>11</div>
+					<div class='col-lg-5 col-md-5 col-sm-5 col-xs-5 history-content'></div> 
+					<div class='col-lg-1 col-md-1 col-sm-1 col-xs-1 hour-status'></div>
+				</div>
+				<div id='{{mon.server}}_history_12' class='col-lg-12 col-md-12 col-sm-12 col-xs-12 history-box'>
+					<div class='col-lg-3 col-md-3 col-sm-3 col-xs-3 hour-label'>12</div>
+					<div class='col-lg-5 col-md-5 col-sm-5 col-xs-5 history-content'></div> 
+					<div class='col-lg-1 col-md-1 col-sm-1 col-xs-1 hour-status'></div>
+				</div>
+				<div id='{{mon.server}}_history_13' class='col-lg-12 col-md-12 col-sm-12 col-xs-12 history-box'>
+					<div class='col-lg-3 col-md-3 col-sm-3 col-xs-3 hour-label'>01</div>
+					<div class='col-lg-5 col-md-5 col-sm-5 col-xs-5 history-content'></div> 
+					<div class='col-lg-1 col-md-1 col-sm-1 col-xs-1 hour-status'></div>
+				</div>
+				<div id='{{mon.server}}_history_14' class='col-lg-12 col-md-12 col-sm-12 col-xs-12 history-box'>
+					<div class='col-lg-3 col-md-3 col-sm-3 col-xs-3 hour-label'>02</div>
+					<div class='col-lg-5 col-md-5 col-sm-5 col-xs-5 history-content'></div> 
+					<div class='col-lg-1 col-md-1 col-sm-1 col-xs-1 hour-status'></div>
+				</div>
+				<div id='{{mon.server}}_history_15' class='col-lg-12 col-md-12 col-sm-12 col-xs-12 history-box'>
+					<div class='col-lg-3 col-md-3 col-sm-3 col-xs-3 hour-label'>03</div>
+					<div class='col-lg-5 col-md-5 col-sm-5 col-xs-5 history-content'></div> 
+					<div class='col-lg-1 col-md-1 col-sm-1 col-xs-1 hour-status'></div>
+				</div>
+				<div id='{{mon.server}}_history_16' class='col-lg-12 col-md-12 col-sm-12 col-xs-12 history-box'>
+					<div class='col-lg-3 col-md-3 col-sm-3 col-xs-3 hour-label'>04</div>
+					<div class='col-lg-5 col-md-5 col-sm-5 col-xs-5 history-content'></div> 	
+					<div class='col-lg-1 col-md-1 col-sm-1 col-xs-1 hour-status'></div>
+				</div>
+				<div id='{{mon.server}}_history_17' class='col-lg-12 col-md-12 col-sm-12 col-xs-12 history-box'>
+					<div class='col-lg-3 col-md-3 col-sm-3 col-xs-3 hour-label'>05</div>
+					<div class='col-lg-5 col-md-5 col-sm-5 col-xs-5 history-content'></div>
+					<div class='col-lg-1 col-md-1 col-sm-1 col-xs-1 hour-status'></div>
+				</div>
+				<div id='{{mon.server}}_history_18' class='col-lg-12 col-md-12 col-sm-12 col-xs-12 history-box'>
+					<div class='col-lg-3 col-md-3 col-sm-3 col-xs-3 hour-label'>06</div>
+					<div class='col-lg-5 col-md-5 col-sm-5 col-xs-5 history-content'></div>
+					<div class='col-lg-1 col-md-1 col-sm-1 col-xs-1 hour-status'></div>
+				</div>
+				<div id='{{mon.server}}_history_19' class='col-lg-12 col-md-12 col-sm-12 col-xs-12 history-box'>
+					<div class='col-lg-3 col-md-3 col-sm-3 col-xs-3 hour-label'>07</div>
+					<div class='col-lg-5 col-md-5 col-sm-5 col-xs-5 history-content'></div> 
+					<div class='col-lg-1 col-md-1 col-sm-1 col-xs-1 hour-status'></div>
+				</div>
+				<div id='{{mon.server}}_history_20' class='col-lg-12 col-md-12 col-sm-12 col-xs-12 history-box'>
+					<div class='col-lg-3 col-md-3 col-sm-3 col-xs-3 hour-label'>08</div>
+					<div class='col-lg-5 col-md-5 col-sm-5 col-xs-5 history-content'></div> 
+					<div class='col-lg-1 col-md-1 col-sm-1 col-xs-1 hour-status'></div>
+				</div>
+				<div id='{{mon.server}}_history_21' class='col-lg-12 col-md-12 col-sm-12 col-xs-12 history-box'>
+					<div class='col-lg-3 col-md-3 col-sm-3 col-xs-3 hour-label'>09</div>
+					<div class='col-lg-5 col-md-5 col-sm-5 col-xs-5 history-content'></div> 
+					<div class='col-lg-1 col-md-1 col-sm-1 col-xs-1 hour-status'></div>
+				</div>
+				<div id='{{mon.server}}_history_22' class='col-lg-12 col-md-12 col-sm-12 col-xs-12 history-box'>
+					<div class='col-lg-3 col-md-3 col-sm-3 col-xs-3 hour-label'>10</div>
+					<div class='col-lg-5 col-md-5 col-sm-5 col-xs-5 history-content'></div> 
+					<div class='col-lg-1 col-md-1 col-sm-1 col-xs-1 hour-status'></div>
+				</div>
+				<div id='{{mon.server}}_history_23' class='col-lg-12 col-md-12 col-sm-12 col-xs-12 history-box'>
+					<div class='col-lg-3 col-md-3 col-sm-3 col-xs-3 hour-label'>11</div>
+					<div class='col-lg-5 col-md-5 col-sm-5 col-xs-5 history-content'></div> 
+					<div class='col-lg-1 col-md-1 col-sm-1 col-xs-1 hour-status'></div>
+				</div>
+
+			</div>
+		</script>
+		
+	</head>
+	<body ng-app='watcher'>
+		
+		<div ng-controller = 'watcherCtrl'>
+			
+			<div class=" col-lg-12 col-md-12 col-sm-12">
+				<h2>Production</h2>
+				<!-- PRIMARY -->
+				<div id="primary_group" class="group-box col-lg-12 col-md-12 col-sm-12 col-xs-12">
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+							<p class='group-label'>Xcenter Application Servers</p>
+						</div>
+						<div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+							<input ng-model='date' type="date" required="required"  class="form-control"/>
+						</div>
+					</div>
+					<div class="my-container col-lg-6 col-md-6 col-sm-6 col-xs-12" ng-repeat="mon in prod_monitors">
+						
+						<server-monitor server="{{mon.server}}" monitor_id="{{mon.sys_id}}" status="{{mon.status}}" ></server-monitor>
+						
+					</div>
+				</div>
+				
+				<!-- PRIMARY -->
+				
+			</div>
+			
+			
+		</div>
+	</body>
+</j:jelly>]]></html>
+        <name>xcenter_monitoring_page</name>
+        <processing_script/>
+        <sys_class_name>sys_ui_page</sys_class_name>
+        <sys_created_by>sebgar01</sys_created_by>
+        <sys_created_on>2017-03-16 20:06:52</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>2dc671ad0f2136004789e34be1050e84</sys_id>
+        <sys_mod_count>20</sys_mod_count>
+        <sys_name>xcenter_monitoring_page</sys_name>
+        <sys_package display_value="Watcher" source="x_kasp_watcher">8eb44d282bad620045eeaacc17da152f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Watcher">8eb44d282bad620045eeaacc17da152f</sys_scope>
+        <sys_update_name>sys_ui_page_2dc671ad0f2136004789e34be1050e84</sys_update_name>
+        <sys_updated_by>sebgar01</sys_updated_by>
+        <sys_updated_on>2017-03-29 18:35:35</sys_updated_on>
+    </sys_ui_page>
+</record_update>

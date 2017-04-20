@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update>
+    <sys_ui_list parent="" relationship="" sys_domain="global" table="incident" version="2" view="">
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>opened_at</element>
+            <list_id display_value="incident" element="NULL" name="incident" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">d98348bf2ba5560045eeaacc17da15b1</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>0</position>
+            <sum>false</sum>
+            <sys_created_by>sebgar01</sys_created_by>
+            <sys_created_on>2016-02-19 19:07:10</sys_created_on>
+            <sys_id>9d8348bf2ba5560045eeaacc17da15b1</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>sebgar01</sys_updated_by>
+            <sys_updated_on>2016-02-19 19:07:10</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>number</element>
+            <list_id display_value="incident" element="NULL" name="incident" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">d98348bf2ba5560045eeaacc17da15b1</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>1</position>
+            <sum>false</sum>
+            <sys_created_by>sebgar01</sys_created_by>
+            <sys_created_on>2016-02-19 19:07:10</sys_created_on>
+            <sys_id>dd8348bf2ba5560045eeaacc17da15b1</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>sebgar01</sys_updated_by>
+            <sys_updated_on>2016-02-19 19:07:10</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>caller_id</element>
+            <list_id display_value="incident" element="NULL" name="incident" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">d98348bf2ba5560045eeaacc17da15b1</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>2</position>
+            <sum>false</sum>
+            <sys_created_by>sebgar01</sys_created_by>
+            <sys_created_on>2016-02-19 19:07:10</sys_created_on>
+            <sys_id>118348bf2ba5560045eeaacc17da15b2</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>sebgar01</sys_updated_by>
+            <sys_updated_on>2016-02-19 19:07:10</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>caller_id.u_micros</element>
+            <list_id display_value="incident" element="NULL" name="incident" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">d98348bf2ba5560045eeaacc17da15b1</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>3</position>
+            <sum>false</sum>
+            <sys_created_by>sebgar01</sys_created_by>
+            <sys_created_on>2016-02-19 19:07:10</sys_created_on>
+            <sys_id>518348bf2ba5560045eeaacc17da15b2</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>sebgar01</sys_updated_by>
+            <sys_updated_on>2016-02-19 19:07:10</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>caller_id.company</element>
+            <list_id display_value="incident" element="NULL" name="incident" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">d98348bf2ba5560045eeaacc17da15b1</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>4</position>
+            <sum>false</sum>
+            <sys_created_by>sebgar01</sys_created_by>
+            <sys_created_on>2016-02-19 19:07:10</sys_created_on>
+            <sys_id>918348bf2ba5560045eeaacc17da15b2</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>sebgar01</sys_updated_by>
+            <sys_updated_on>2016-02-19 19:07:10</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>short_description</element>
+            <list_id display_value="incident" element="NULL" name="incident" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">d98348bf2ba5560045eeaacc17da15b1</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>5</position>
+            <sum>false</sum>
+            <sys_created_by>sebgar01</sys_created_by>
+            <sys_created_on>2016-02-19 19:07:10</sys_created_on>
+            <sys_id>d18348bf2ba5560045eeaacc17da15b2</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>sebgar01</sys_updated_by>
+            <sys_updated_on>2016-02-19 19:07:10</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>sys_created_on</element>
+            <list_id display_value="incident" element="NULL" name="incident" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">d98348bf2ba5560045eeaacc17da15b1</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>6</position>
+            <sum>false</sum>
+            <sys_created_by>sebgar01</sys_created_by>
+            <sys_created_on>2016-02-19 19:07:10</sys_created_on>
+            <sys_id>158348bf2ba5560045eeaacc17da15b2</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>sebgar01</sys_updated_by>
+            <sys_updated_on>2016-02-19 19:07:10</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>incident_state</element>
+            <list_id display_value="incident" element="NULL" name="incident" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">d98348bf2ba5560045eeaacc17da15b1</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>7</position>
+            <sum>false</sum>
+            <sys_created_by>sebgar01</sys_created_by>
+            <sys_created_on>2016-02-19 19:07:10</sys_created_on>
+            <sys_id>558348bf2ba5560045eeaacc17da15b2</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>sebgar01</sys_updated_by>
+            <sys_updated_on>2016-02-19 19:07:10</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>comments</element>
+            <list_id display_value="incident" element="NULL" name="incident" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">d98348bf2ba5560045eeaacc17da15b1</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>8</position>
+            <sum>false</sum>
+            <sys_created_by>sebgar01</sys_created_by>
+            <sys_created_on>2016-02-19 19:07:10</sys_created_on>
+            <sys_id>958348bf2ba5560045eeaacc17da15b2</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>sebgar01</sys_updated_by>
+            <sys_updated_on>2016-02-19 19:07:10</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>category</element>
+            <list_id display_value="incident" element="NULL" name="incident" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">d98348bf2ba5560045eeaacc17da15b1</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>9</position>
+            <sum>false</sum>
+            <sys_created_by>sebgar01</sys_created_by>
+            <sys_created_on>2016-02-19 19:07:10</sys_created_on>
+            <sys_id>d58348bf2ba5560045eeaacc17da15b2</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>sebgar01</sys_updated_by>
+            <sys_updated_on>2016-02-19 19:07:10</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>priority</element>
+            <list_id display_value="incident" element="NULL" name="incident" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">d98348bf2ba5560045eeaacc17da15b1</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>10</position>
+            <sum>false</sum>
+            <sys_created_by>sebgar01</sys_created_by>
+            <sys_created_on>2016-02-19 19:07:10</sys_created_on>
+            <sys_id>198348bf2ba5560045eeaacc17da15b2</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>sebgar01</sys_updated_by>
+            <sys_updated_on>2016-02-19 19:07:10</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>sla_due</element>
+            <list_id display_value="incident" element="NULL" name="incident" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">d98348bf2ba5560045eeaacc17da15b1</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>11</position>
+            <sum>false</sum>
+            <sys_created_by>sebgar01</sys_created_by>
+            <sys_created_on>2016-02-19 19:07:10</sys_created_on>
+            <sys_id>598348bf2ba5560045eeaacc17da15b2</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>sebgar01</sys_updated_by>
+            <sys_updated_on>2016-02-19 19:07:10</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>escalation</element>
+            <list_id display_value="incident" element="NULL" name="incident" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">d98348bf2ba5560045eeaacc17da15b1</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>12</position>
+            <sum>false</sum>
+            <sys_created_by>sebgar01</sys_created_by>
+            <sys_created_on>2016-02-19 19:07:10</sys_created_on>
+            <sys_id>998348bf2ba5560045eeaacc17da15b2</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>sebgar01</sys_updated_by>
+            <sys_updated_on>2016-02-19 19:07:10</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>assigned_to</element>
+            <list_id display_value="incident" element="NULL" name="incident" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">d98348bf2ba5560045eeaacc17da15b1</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>13</position>
+            <sum>false</sum>
+            <sys_created_by>sebgar01</sys_created_by>
+            <sys_created_on>2016-02-19 19:07:10</sys_created_on>
+            <sys_id>d98348bf2ba5560045eeaacc17da15b2</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>sebgar01</sys_updated_by>
+            <sys_updated_on>2016-02-19 19:07:10</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>problem_id.short_description</element>
+            <list_id display_value="incident" element="NULL" name="incident" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">d98348bf2ba5560045eeaacc17da15b1</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>14</position>
+            <sum>false</sum>
+            <sys_created_by>sebgar01</sys_created_by>
+            <sys_created_on>2016-02-19 19:07:10</sys_created_on>
+            <sys_id>1d8348bf2ba5560045eeaacc17da15b2</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>sebgar01</sys_updated_by>
+            <sys_updated_on>2016-02-19 19:07:10</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>made_sla</element>
+            <list_id display_value="incident" element="NULL" name="incident" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">d98348bf2ba5560045eeaacc17da15b1</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>15</position>
+            <sum>false</sum>
+            <sys_created_by>sebgar01</sys_created_by>
+            <sys_created_on>2016-02-19 19:07:10</sys_created_on>
+            <sys_id>5d8348bf2ba5560045eeaacc17da15b2</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>sebgar01</sys_updated_by>
+            <sys_updated_on>2016-02-19 19:07:10</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>calendar_stc</element>
+            <list_id display_value="incident" element="NULL" name="incident" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">d98348bf2ba5560045eeaacc17da15b1</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>16</position>
+            <sum>false</sum>
+            <sys_created_by>sebgar01</sys_created_by>
+            <sys_created_on>2016-02-19 19:07:10</sys_created_on>
+            <sys_id>9d8348bf2ba5560045eeaacc17da15b2</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>sebgar01</sys_updated_by>
+            <sys_updated_on>2016-02-19 19:07:10</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>caller_id.user_name</element>
+            <list_id display_value="incident" element="NULL" name="incident" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">d98348bf2ba5560045eeaacc17da15b1</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>17</position>
+            <sum>false</sum>
+            <sys_created_by>sebgar01</sys_created_by>
+            <sys_created_on>2016-02-19 19:07:10</sys_created_on>
+            <sys_id>dd8348bf2ba5560045eeaacc17da15b2</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>sebgar01</sys_updated_by>
+            <sys_updated_on>2016-02-19 19:07:10</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>caller_id.source</element>
+            <list_id display_value="incident" element="NULL" name="incident" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">d98348bf2ba5560045eeaacc17da15b1</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>18</position>
+            <sum>false</sum>
+            <sys_created_by>sebgar01</sys_created_by>
+            <sys_created_on>2016-02-19 19:07:10</sys_created_on>
+            <sys_id>118348bf2ba5560045eeaacc17da15b3</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>sebgar01</sys_updated_by>
+            <sys_updated_on>2016-02-19 19:07:10</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element/>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <name>incident</name>
+            <parent/>
+            <position/>
+            <relationship/>
+            <sum>false</sum>
+            <sys_class_name>sys_ui_list</sys_class_name>
+            <sys_created_by>sebgar01</sys_created_by>
+            <sys_created_on>2016-09-20 13:24:34</sys_created_on>
+            <sys_customer_update>true</sys_customer_update>
+            <sys_domain>global</sys_domain>
+            <sys_id>9d59bc242b4eea4045eeaacc17da15c7</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>incident</sys_name>
+            <sys_package display_value="Watcher" source="x_kasp_watcher">8eb44d282bad620045eeaacc17da152f</sys_package>
+            <sys_policy/>
+            <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+            <sys_scope display_value="Watcher">8eb44d282bad620045eeaacc17da152f</sys_scope>
+            <sys_update_name>sys_ui_list_incident_null</sys_update_name>
+            <sys_updated_by>sebgar01</sys_updated_by>
+            <sys_updated_on>2016-09-20 13:24:34</sys_updated_on>
+            <sys_user display_value="Sebastian Gonzalez-Garcia">96e7c5caf58e0100649946d7569884b1</sys_user>
+            <view display_value="Default view" name="NULL">Default view</view>
+            <view_name/>
+        </sys_ui_list>
+    </sys_ui_list>
+</record_update>

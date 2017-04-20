@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update sys_domain="global" table="sysevent_email_action">
+    <sysevent_email_action action="INSERT_OR_UPDATE">
+        <action_insert>false</action_insert>
+        <action_update>false</action_update>
+        <active>false</active>
+        <advanced_condition/>
+        <affected_field_on_event/>
+        <collection>x_kasp_watcher_monitors</collection>
+        <condition/>
+        <content_type>text/html</content_type>
+        <description/>
+        <event_name>x_kasp_watcher.server_up</event_name>
+        <event_parm_1>false</event_parm_1>
+        <event_parm_2>false</event_parm_2>
+        <exclude_delegates>false</exclude_delegates>
+        <force_delivery>false</force_delivery>
+        <from/>
+        <generation_type>event</generation_type>
+        <group/>
+        <group_field/>
+        <importance/>
+        <include_attachments>false</include_attachments>
+        <item>event.parm1</item>
+        <item_table/>
+        <list/>
+        <list_field/>
+        <mandatory>false</mandatory>
+        <message/>
+        <message_html><![CDATA[<p><strong>Service-Now Watcher has detected that the server below has come back online.</strong></p>
+<p>Server Details:</p>
+<p>Server:<font color="#000000"><strong> ${server}</strong></font></p>
+<p>Status:&nbsp;<em><font color="#008000"><strong>ONLINE</strong></font></em></p>
+<p>Updated: <strong>${sys_updated_on}</strong></p>
+<p>&nbsp;</p>
+<p>Click link below to view status of all servers</p>
+<p>Go to ==&gt;&nbsp;<a title="Watcher" href="https://katespade.service-now.com/nav_to.do?uri=%2Fx_kasp_watcher_locate_monitor_page.do">Watcher</a></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>]]></message_html>
+        <message_list/>
+        <message_text/>
+        <name>Server is Back Up</name>
+        <omit_watermark>true</omit_watermark>
+        <order/>
+        <push_message_only>false</push_message_only>
+        <recipient_fields/>
+        <recipient_groups name="Database Administration - Corporate">ed73ce2e0a0a3c1c00ee4ea5d1cca300</recipient_groups>
+        <recipient_users>f3c696e50a0a3c1c01ad6f516bcb5bee</recipient_users>
+        <reply_to/>
+        <send_self>true</send_self>
+        <sms_alternate/>
+        <style/>
+        <subject>Server is back up</subject>
+        <subscribable>false</subscribable>
+        <sys_class_name>sysevent_email_action</sys_class_name>
+        <sys_created_by>sebgar01</sys_created_by>
+        <sys_created_on>2016-09-01 17:00:39</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_id>935373d213656a0053dc51522244b085</sys_id>
+        <sys_mod_count>11</sys_mod_count>
+        <sys_name>Server is Back Up</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Watcher" source="x_kasp_watcher">8eb44d282bad620045eeaacc17da152f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Watcher">8eb44d282bad620045eeaacc17da152f</sys_scope>
+        <sys_update_name>sysevent_email_action_935373d213656a0053dc51522244b085</sys_update_name>
+        <sys_updated_by>sebgar01</sys_updated_by>
+        <sys_updated_on>2017-03-01 15:46:24</sys_updated_on>
+        <sys_version>2</sys_version>
+        <template/>
+        <type>email</type>
+        <user/>
+        <user_field/>
+        <weight>0</weight>
+    </sysevent_email_action>
+</record_update>

@@ -1,0 +1,1075 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ui_page">
+    <sys_ui_page action="INSERT_OR_UPDATE">
+        <category>general</category>
+        <client_script><![CDATA[var watcher = angular.module('watcher',[]);
+
+watcher.controller('watcherCtrl',['$interval','$scope','$http', '$location', '$anchorScroll',/*'monitorStatus',*/
+function($interval,$scope,$http,$location,$anchorScroll/*,monitorStatus*/){
+	var maintenance = true;
+	
+	if(maintenance && !g_user.hasRole('admin')){
+		$('body').html('<div id="maintenance_box"><p id="maintenance_message">Site is under maintenance</p></div>');
+		return;
+	}
+	
+	$scope.url = '/api/now/table/';
+	$http.defaults.headers.common.Accept = "application/json";
+	
+	$interval(function(){$scope.dateTime = Date();},5000);
+	
+	$scope.showTest = false;
+	
+	$scope.prod_monitors = [];
+	$scope.primary = [];
+	$scope.internal = [];
+	$scope.external = [];
+	$scope.available = [];
+	$scope.test_monitors = [];
+	
+	$scope.getMonitors = function(){
+		$http({
+			method: 'GET',
+			url: $scope.url + "x_kasp_watcher_monitors?sysparm_query=type=http^application=Locate^ORDERBYserver",
+			headers:{
+				'X-UserToken': window.g_ck.toString()
+			}
+		}).success(function(data, status){
+			console.log(data);
+			var monitor = {};
+			for(var i = 0; i < data.result.length; i++){
+				//console.log("SERVER " + data.result[i].server);
+				monitor = {
+					sys_id: data.result[i].sys_id,
+					server: data.result[i].server,
+					status: data.result[i].status,
+					monitored: data.result[i].monitor
+				};
+				if(data.result[i].environment == 'production'){
+					if(monitor.server == "vusasecloc01"){
+						$scope.primary.push(monitor);
+					}else if(monitor.server == "vusasecloc02" || monitor.server == "vusasecloc03" ||  monitor.server == "vusasecloc04"){
+						$scope.internal.push(monitor);
+					}else if(monitor.server == "vusasecloc06" || monitor.server == "vusasecloc07" ||  monitor.server == "vusasecloc08"
+					||  monitor.server == "vusasecloc09" ||  monitor.server == "vusasecloc10"){
+						$scope.external.push(monitor);
+					}else{
+						$scope.available.push(monitor);
+					}
+					//$scope.prod_monitors.push(monitor);
+				}else if(data.result[i].environment == 'test'){
+					$scope.test_monitors.push(monitor);
+				}
+				
+			}
+			
+			function sorter(a, b){
+				return a.server > b.server;
+			}
+			
+			$scope.prod_monitors.sort(sorter);
+			$scope.test_monitors.sort(sorter);
+			
+			
+			
+		}).error(function(data, status){
+			
+		});
+	};
+	
+	
+	$scope.show_test = function(){
+		$scope.showTest = !$scope.showTest;
+		$scope.gotoBottom();
+	};
+	
+	$scope.gotoBottom = function() {
+		
+		$location.hash('test_env');
+		
+		$anchorScroll();
+	};
+	
+	$scope.getMonitors();
+	//monitorStatus.getMonitorStatus();
+	
+}
+
+]);
+
+
+watcher.directive('serverMonitor',['$http', '$interval', function($http,$interval){
+	var green = '<img src="redServer.png" width="50"/>';
+	var red = '<img src="greenServer.png" width="50"/> ';
+	var url = '/api/now/table/';
+	var temp = $("#monitorHtml").html();
+	//temp = temp.substring(temp .indexOf('<'));
+	temp = temp.replace("//"," ");
+	temp = temp.replace("//"," ");
+	return {
+		replace: false,
+		restrict: 'E',
+		scope:{
+			server:'@',
+			status: '@',
+			env:'@',
+		},
+		
+		link: function($scope){
+			
+			
+		},
+		controller: ['$scope','datePickerAPI',function($scope,datePickerAPI){
+			$scope.up = false;
+			$scope.response_received = false;
+			
+			$scope.cert_exp = "";
+			
+			$scope.lastCheck = "";
+			$scope.lastCheckDate = "";
+			$scope.lastCheckTime = "";
+			
+			$scope.httpStatus = "";
+			$scope.monitor = "";
+			$scope.ram = "";
+			$scope.disk = "";
+			$scope.cons = "";
+			
+			$scope.history = {};
+			$scope[$scope.server+"_history_loaded"] = false;
+			$scope.end = 0;
+			$scope.start = "00:00:00";
+			$scope.date = "";
+			
+			$scope.avg_db_time = "Calculating...";
+			
+			$scope.dba_admin = g_user.hasRole('dba');
+			
+			$scope.hist_height = 0;
+			
+			$scope.status_running = true;
+			
+			$scope.dateAPI = datePickerAPI;
+			
+			$scope.loading_page = true;
+			
+			$scope.status_interval = null;
+			$scope.load_history_interval = null;
+			
+			$scope.today = new Date();
+			$scope.year = $scope.today.getFullYear();
+			$scope.month = (($scope.today.getMonth()+1) < 10)? "0"+($scope.today.getMonth()+1) : $scope.today.getMonth()+1;
+			$scope.date = ($scope.today.getDate() < 10)? "0"+$scope.today.getDate():$scope.today.getDate() ;
+			
+			$scope.todayFullDate = $scope.year + '-' + $scope.month + '-' + $scope.date;
+			
+			
+			$scope.$watch('dateAPI.date',runDateChange);
+			
+			function runDateChange() {
+				if($scope.loading_page){
+					return;
+				}
+				$scope.checkAndStopStatus($scope.dateAPI.date);
+				
+			}
+			
+			$scope.getOldMonitorStatus = function(date){
+				$http({
+					method: 'GET',
+					url: url +"x_kasp_watcher_monitor_history?"+ "sysparm_query=server="+$scope.server+"^timeSTARTSWITH23:59^date="+date+"^sys_created_onON@" +date+"^ORDERBYDESCsys_created_on",
+					
+					headers:{
+						'X-UserToken': window.g_ck.toString()
+					}
+					
+				}).success(function(data,status){
+					
+					//console.log(data);
+					
+					if(data.result.length == 0){
+						console.log('No Results');
+						return;
+					}
+					
+					var result;
+					var create_date;
+					var create_arr;
+					for(var i = 0; i < data.result.length; i++){
+						create_date = data.result[i].sys_created_on;
+						create_arr = create_date.split(' ');
+						if(create_arr[1].indexOf('04:') != 0){
+							continue;
+						}else{
+							
+							if(result == null){
+								result = data.result[i];
+							}else if(result < create_arr[1]){
+								result = data.result[i];
+							}
+						}
+					}
+					
+					$scope.httpStatus = result.status;
+					
+					$scope.avg_db_time = result.avg_db_request_time;
+					if($scope.avg_db_time == "NaN"){
+						$scope.avg_db_time = "No Requests";
+					}else{
+						$scope.avg_db_time += " sec";
+					}
+					$scope.db_requests_num = result.db_requests;
+					
+					var lastCheck = result.date +' '+ data.result[0].time;
+					
+					var dateArray = lastCheck.split(" ");
+					
+					$scope.lastCheckDate = dateArray[0];
+					$scope.lastCheckTime = dateArray[1];
+					
+					$scope.cert_exp = result.cert_expiration;
+					
+					if($scope.httpStatus == 200){
+						$("#"+$scope.server).effect( "highlight", {color:"#17DB00"}, 1000, null);
+						
+					}else if($scope.httpStatus != -1){
+						$("#"+$scope.server).effect( "highlight", {color:"#ED0E0E"}, 1000, null);
+						
+					}else{
+						$("#"+$scope.server).effect( "highlight", {color:"#FFC308"}, 1000, null);
+						$scope.httpStatus = "N/A";
+					}
+					
+					
+					
+					$scope.disk = result.disk;
+					$scope.cons = result.active_connections;
+					$scope.ram = result.ram;
+					
+					if($scope.ram.length > 3){
+						var comma_counter = 0;
+						var temp;
+						for(var j = $scope.ram.length -1; j >= 0; j--){
+							if(comma_counter > 0 && comma_counter %3 == 0){
+								$scope.ram = $scope.ram.substring(0,$scope.ram.length - comma_counter) + "," + $scope.ram.substring($scope.ram.length - comma_counter);
+							}
+							
+							comma_counter++;
+						}
+					}
+					$scope.ram +=  " MB";
+				}).error(function(data,status){
+					
+				});
+				
+			};
+			
+			$scope.getMonitorStatus = function(name){
+				
+
+				$http({
+					method: 'GET',
+					url: url + "x_kasp_watcher_monitors?sysparm_query=type=http^server="+name,
+					headers:{
+						'X-UserToken': window.g_ck.toString()
+					}
+				}).success(function(data, status){
+					
+					//console.log("Got response for " + name + " size " + data.result.length);
+					$scope.monitor = data.result[0].sys_id;
+					
+					if($scope.lastCheck != data.result[0].last_check){
+						
+						$scope.httpStatus = data.result[0].status;
+						
+						$scope.avg_db_time = data.result[0].avg_db_request_time;
+						if($scope.avg_db_time == "NaN"){
+							$scope.avg_db_time = "No Requests";
+						}else{
+							$scope.avg_db_time += " sec";
+						}
+						$scope.db_requests_num = data.result[0].db_requests;
+						
+						$scope.lastCheck = data.result[0].last_check;
+						
+						var dateArray = data.result[0].last_check.split(" ");
+						
+						$scope.lastCheckDate = dateArray[0];
+						$scope.lastCheckTime = dateArray[1];
+						
+						$scope.cert_exp = data.result[0].cert_expiration;
+						
+						var time = $scope.lastCheckTime;
+						var timeArr = time.split(":");
+						$scope.end = timeArr[0];
+						
+						
+						if($scope.httpStatus == 200){
+							$("#"+$scope.server).effect( "highlight", {color:"#17DB00"}, 1000, null);
+							$scope.up = true;
+							$scope.response_received = true;
+						}else if($scope.httpStatus != -1){
+							$("#"+$scope.server).effect( "highlight", {color:"#ED0E0E"}, 1000, null);
+							$scope.up = false;
+							$scope.response_received = true;
+						}else{
+							$("#"+$scope.server).effect( "highlight", {color:"#FFC308"}, 1000, null);
+							$scope.httpStatus = "N/A";
+							$scope.response_received = false;
+						}
+						
+					}
+					
+					$scope.disk = data.result[0].free_disk_space;
+					$scope.cons = data.result[0].active_connections;
+					$scope.ram = data.result[0].ram_mb;
+					
+					if($scope.ram.length > 3){
+						var comma_counter = 0;
+						var temp;
+						for(var j = $scope.ram.length -1; j >= 0; j--){
+							if(comma_counter > 0 && comma_counter %3 == 0){
+								$scope.ram = $scope.ram.substring(0,$scope.ram.length - comma_counter) + "," + $scope.ram.substring($scope.ram.length - comma_counter);
+							}
+							
+							comma_counter++;
+						}
+					}
+					$scope.ram +=  " MB";
+					
+					if($scope.loading_page){
+						$scope.loading_page = false;
+					}
+					
+					
+				}).error(function(data, status){
+					
+				});
+				
+			};
+			
+			$scope.startHistory = function(){
+				console.log("loading history");
+				
+				$scope[$scope.server+"_history_loaded"] = true;
+				
+				if(!$scope.status_running){
+					console.log("Status not running");
+					$scope.getHistoryDriver($scope.server);
+				}else{
+					console.log("Status is running");
+					
+					$scope.getHistoryDriver($scope.server);
+					$scope.load_history_interval = $interval(function(){$scope.getHistoryDriver($scope.server);},60000);
+				}
+				
+			};
+			
+			$scope.getHistoryDriver = function(name){
+				var today = new Date();
+				var hour = (today.getHours()<10)? "0" + today.getHours() : today.getHours();
+				var min = (today.getMinutes()<10)? "0" + today.getMinutes() : today.getMinutes();
+				var sec = (today.getSeconds() < 10)? "0" + today.getSeconds() : today.getSeconds();
+				
+				$scope.end = hour+":"+min+":"+sec;
+				$scope.getHistory($scope.server,$scope.todayFullDate, $scope.start, $scope.end);
+			};
+			
+			$scope.getHistory = function(name,date,start,end){
+				
+				if(!$scope.status_running){
+					date = $scope.dateAPI.date;
+					start = "00:00:00";
+					end = "23:59:59";
+				}
+				console.log(url +"x_kasp_watcher_monitor_history?"+ "sysparm_query=date="+date+"^time>=" + start + "^time<=" + end + "^server="+name+"^sys_created_onON" +date+"^ORDERBYsys_created_on");
+				$http({
+					method: 'GET',
+					url: url +"x_kasp_watcher_monitor_history?"+ "sysparm_query=date="+date+"^time>=" + start + "^time<=" + end + "^server="+name+"^ORDERBYsys_created_on",
+					
+					headers:{
+						'X-UserToken': window.g_ck.toString()
+					}
+					
+				}).success(function(data,status){
+					
+					console.log("Data");
+					console.log(data.result);
+					
+					$scope.start = $scope.end;
+					
+					
+					$scope.setHistory(data.result);
+					
+					
+				}).error(function(data,status){
+					
+				});
+				
+			};
+			
+			$scope.setHistory = function(histArr){
+				console.log($scope.history);
+				$scope.today = new Date();
+				var currentHour = $scope.today.getHours();
+				currentHour = (currentHour < 10) ? "0"+currentHour : currentHour;
+						
+				var hrIndex = 0;
+				var hrString = "00";
+				
+				if($scope.dateAPI.date != null && $scope.dateAPI.date != $scope.todayFullDate){
+					currentHour = 23;
+				}
+				
+				while(hrString <= currentHour){
+					if($scope.history[hrString] == null){
+						$scope.history[hrString] = {
+							status:'',
+							errors:0,
+							downs:0,
+							reqs:''
+						};
+						
+					}
+					
+					hrIndex++;
+					hrString = (hrIndex < 10 )? "0"+ hrIndex : hrIndex;
+				}
+				
+				var timeArr;
+				var hour;
+				
+				var errorCount = 0;
+				var downCount = 0;
+				
+				var hrly_db_arr;
+				var hrly_db_hour;
+				var hrly_db_reqs;
+				
+				for(var i = 0; i < histArr.length; i++){
+					timeArr = histArr[i].time.split(":");
+					hour = timeArr[0];
+					
+					if(histArr[i].status == 200 ){
+						//UP
+					}else if(histArr[i].status == -1){
+						//ERROR
+						$scope.history[hour].errors++;
+						
+					}else if(histArr[i].status == 0){
+						//DOWN
+						$scope.history[hour].downs++;
+						
+					}
+					
+					
+					hrly_db_arr = histArr[i].hourly_db_requests.split(":");
+					hrly_db_hour = hrly_db_arr[0];
+					hrly_db_reqs = hrly_db_arr[1];
+					
+					//console.log("HOUR "  + hrly_db_hour);
+					if(hour != hrly_db_hour){
+						continue;
+					}
+					if($scope.history[hrly_db_hour].reqs == '' || $scope.history[hrly_db_hour].reqs == null || parseInt($scope.history[hrly_db_hour].reqs) < parseInt(hrly_db_reqs)){
+						
+						$scope.history[hrly_db_hour].reqs = hrly_db_reqs;
+						
+					}else{
+						
+						
+					}
+					//console.log("CURRENT HOUR:" + hour);
+					//console.log("VAL:"+$scope.history[hour].reqs );
+					//console.log($scope.history);
+					
+					
+					if($scope.history[hour].errors < 3 && $scope.history[hour].downs < 3){
+						$("#"+$scope.server+"_history_"+hour).css('background-color','green');
+					}else if($scope.history[hour].downs >=3){
+						$("#"+$scope.server+"_history_"+hour).css('background-color','red');
+					}else if($scope.history[hour].errors >= 3){
+						$("#"+$scope.server+"_history_"+hour).css('background-color','#FFC308');
+					}
+				
+					
+					$('#'+$scope.server+"_history_"+hrly_db_hour)
+					.children('.hour_req_container')
+					.children('.hour_req')
+					.html($scope.history[hrly_db_hour].reqs);
+					
+					
+				}
+				
+			};
+			
+			$scope.cleanHistory = function(){
+				console.log('cleaning history on ' + $scope.server);
+				var num = 0;
+				var hour;
+				while(num < 24){
+					
+					hour = (num < 10) ? "0"+num: num;
+					$("#"+$scope.server+"_history_"+hour).css('background-color','#CECECE');
+					$('#'+$scope.server+"_history_"+hour)
+					.children('.hour_req_container')
+					.children('.hour_req')
+					.html("");
+					num++;
+				}
+				console.log('done cleaning history on ' + $scope.server);
+			};
+			
+			$scope.restartButtonClick = function(){
+				$("#confirmModal_"+$scope.server).modal({
+					show: true
+				});
+				//console.log("Restarting " + $scope.server);
+			};
+			
+			$(".confirm_restart").click(function(){
+				console.log("Confirm Restarting " + $scope.server);
+				var prefix = "confirm_close_";
+				var button_id = this.id;
+				var server_restart_app = button_id.substring(prefix.length);
+				
+				if(server_restart_app != $scope.server){
+					
+					return;
+				}
+				
+				$scope.restartApp(server_restart_app);
+			});
+			
+			$scope.restartApp = function(server_to_restart){
+				
+				$http({
+					method:"POST",
+					url:"api/now/table/x_kasp_watcher_watcher_events",
+					headers:{
+						'Accept':'application/json',
+						'Content-Type':'application/json',
+						'X-UserToken': window.g_ck.toString()
+					},
+					data:{
+						monitor: $scope.monitor,
+						server: server_to_restart,
+						type: 'restart'
+					}
+				}).success(function(data,status){
+					console.log("Restarting Application");
+				}).error(function(data,status){
+					console.log("Restarting Application");
+				});
+			};
+			
+			
+			
+			$('#date_picker').datepicker({
+				autoclose: true,
+				todayHighlight: true,
+				dateFormat: 'yy-mm-dd',
+				onSelect: function(dateText) {
+					console.log("Selected date: " + dateText + "; input's current value: " + this.value);
+					$scope.dateAPI.change(dateText);
+					
+					
+				}
+			});
+			$('#date_picker').datepicker("setDate",new Date());
+			
+			
+			
+			$scope.checkAndStopStatus = function(date){
+				
+				$scope.history = {};
+				if($scope.todayFullDate != $('#date_picker').val()){
+					//console.log("CANCELLED SERVER " + $scope.server);
+					$interval.cancel($scope.status_interval);
+					if($scope.load_history_interval != null){
+						$scope.cleanHistory();
+						//console.log("cancelling history on " + $scope.server);
+						$interval.cancel($scope.load_history_interval);
+						$scope.load_history_interval = null;
+					}
+					
+					$scope.status_running = false;
+					
+					if($scope[$scope.server+"_history_loaded"]){
+						
+						console.log('starting history again');
+						
+						$scope.startHistory();
+					}
+					
+					
+					
+					$scope.getOldMonitorStatus(date);
+				}else{
+					//console.log('Starting interval on ' + $scope.server);
+					if(!$scope.status_running){
+						$scope.status_interval = $interval(function(){$scope.getMonitorStatus($scope.server);},5000);
+						$scope.status_running = true;
+					}
+					
+					if($scope[$scope.server+"_history_loaded"]){
+						$scope.start = "00:00:00";
+						$scope.cleanHistory();
+						$scope.startHistory();
+					}
+					
+				}
+				
+			};
+			
+			$(".logs_button").click(function() {
+				var button = this.id;
+				var serv = button.substring(0, button.indexOf("_"));
+				var modal = serv + "_modal";
+				
+				$("#"+modal).modal({
+					show: true
+				});
+				
+				if(button.indexOf("error") >= 0){
+					$scope.getLogs("ERROR");
+				}
+				
+				
+			});
+			
+			
+			$scope.getLogs = function(type){
+			
+				
+				console.log("Getting logs " + $scope.server + " for " + $scope.todayFullDate);
+				$http({
+					methods: "GET",
+					
+					url:"api/now/table/x_kasp_watcher_server_logs?sysparm_query=server%3D"+$scope.server+"%5Elog_lineSTARTSWITH"+type+"%5EtimestampSTARTSWITH"+$scope.todayFullDate+"%5Esys_created_onONToday%40javascript%3Ags.daysAgoStart(0)%40javascript%3Ags.daysAgoEnd(0)%5EORDERBYtimestamp",
+					headers:{
+						"X-UserToken": window.g_ck.toString()
+					}
+				}).success(function(data, status){
+					
+					
+					var logs_html = "";
+					
+					if(data.result.length <= 0){
+						logs_html = "No Errors";
+					}else{
+						for(var i = 0; i < data.result.length; i++){
+							
+							logs_html += "<p class='logline'>" + data.result[i].timestamp + " " +data.result[i].log_line + "</p>";
+							
+							
+						}
+					}
+					
+					
+					
+					$("#"+$scope.server + "_logs").html(logs_html);
+					
+				}).error();
+				
+			};
+			
+			
+			
+			$scope.getMonitorStatus($scope.server);
+			$scope.status_interval = $interval(function(){$scope.getMonitorStatus($scope.server);},5000);
+			
+			
+			$scope.getContainerHeight = function(){
+				var monitor_box =  $("#monitor_box_"+$scope.server);
+				var monitor_container = monitor_box.children(".monitor-container");
+				
+				$scope.hist_height = monitor_container.height()+13;//for padding
+				$scope.hist_height = $scope.hist_height/24;
+				$scope.hist_height += "px";
+				
+				//console.log("Server " + $scope.server + " container " + monitor_container.height() + " hist " + $scope.hist_height);
+			};
+			
+			$interval(function(){$scope.getContainerHeight();},2000,1);
+			
+			$(window).resize(function() {
+				$scope.getContainerHeight();
+			});
+			
+		}],
+		
+		template: temp
+	};
+	
+}]);
+
+watcher.factory('datePickerAPI',function(){
+	
+	return{
+		date: null,
+		change:function(newDate){
+			
+			this.date = newDate;
+		}
+		
+	};
+});
+]]></client_script>
+        <description/>
+        <direct>false</direct>
+        <endpoint>x_kasp_watcher_locate_monitor_page.do</endpoint>
+        <html><![CDATA[<?xml version="1.0" encoding="utf-8" ?>
+<j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
+	<head>
+
+		<!--<g:requires name="my_angular_min.jsdbx"/>-->
+		<g:requires name="my_jquery_min.jsdbx"/>
+		<g:requires name="my_jquery_ui_min.jsdbx"/>
+		<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"></link>
+	
+		<link rel="stylesheet" type="text/css" href="a54ef58d0f20fa444789e34be1050eb7.cssdbx"> </link>
+		
+		<script type="text/plain" id="monitorHtml">
+			<div id="monitor_box_{{server}}" class="monitor-box col-lg-12 col-md-12 col-sm-12">
+				<div class="monitor-container col-lg-10 col-md-10 col-sm-10">
+				
+					<div id="{{server}}" class="col-lg-12 col-md-12 col-sm-12 name_img_box">
+						<p class="server_name">{{server}} </p> 
+						<img ng-show="!up $[AMP]$[AMP] response_received" src="redServer.png" width="50"/> 
+						<img ng-show="up $[AMP]$[AMP] response_received" src="greenServer.png" width="50"/>
+						<img  ng-show="!response_received" src="server.png" width="50" height="80"/>
+					</div>
+					<div class="col-lg-12 col-md-12 col-sm-12 details">
+						<div class="detail_box col-lg-4 col-md-4 col-sm-4">
+							<p class="detail_value">{{httpStatus}}</p>
+							<p class="detail_label">HTTP status</p>	
+						</div>
+						<div class="detail_box middle_detail_box col-lg-4 col-md-4 col-sm-4">
+							<p class="detail_value">{{ram}}</p>
+							<p class="detail_label">RAM <br/>Free</p>
+						</div>
+						<div class="detail_box col-lg-4 col-md-4 col-sm-4">
+							<p class="detail_value">{{disk}} %</p>
+							<p class="detail_label">Disk <br/>Free</p>
+						</div>
+						<div class="db_stat db_stat_left detail_box bottom_details col-lg-6 col-md-6 col-sm-12">
+							<p class="detail_label">Average DB <br/>Request Time</p>
+							<p class="detail_value">{{avg_db_time}}</p>
+						</div>
+						
+						<div class="db_stat db_stat_right detail_box bottom_details col-lg-6 col-md-6 col-sm-12">
+							<p class="detail_label">DB Requests</p>
+							<p class="detail_value">{{db_requests_num}}</p>
+						</div>
+						<div class="detail_box bottom_details col-lg-12 col-md-12 col-sm-12">
+							<p class="detail_box detail_label">Last HTTP Check</p>
+							<div class="detail_box col-lg-6 col-md-6 col-sm-12">
+								<p class="detail_value date_left">{{lastCheckDate}}</p>
+							</div>
+							<div class="detail_box col-lg-6 col-md-6 col-sm-12">
+								<p class="detail_value date_right">{{lastCheckTime}}</p>
+							</div>
+						</div>
+						<div class="detail_box bottom_details col-lg-12 col-md-12 col-sm-12">
+							<p class="detail_label">Certificate Expiration</p>
+							<p class="detail_value">{{cert_exp}}</p>	
+						</div>
+
+					</div>
+				</div>
+				<div class="history-container col-lg-2 col-md-2 col-sm-2">
+					<div id="{{server}}_history_00" class="history_box" style="height:{{hist_height}}" title="12AM"><div class="hour_req_container"><p class="hour_req"></p></div></div>
+					<div id="{{server}}_history_01" class="history_box" style="height:{{hist_height}}" title="01AM"><div class="hour_req_container"><p class="hour_req"></p></div></div>
+					<div id="{{server}}_history_02" class="history_box" style="height:{{hist_height}}" title="02AM"><div class="hour_req_container"><p class="hour_req"></p></div></div>
+					<div id="{{server}}_history_03" class="history_box" style="height:{{hist_height}}" title="03AM"><div class="hour_req_container"><p class="hour_req"></p></div></div>
+					<div id="{{server}}_history_04" class="history_box" style="height:{{hist_height}}" title="04AM"><div class="hour_req_container"><p class="hour_req"></p></div></div>
+					<div id="{{server}}_history_05" class="history_box" style="height:{{hist_height}}" title="05AM"><div class="hour_req_container"><p class="hour_req"></p></div></div>
+					<div id="{{server}}_history_06" class="history_box" style="height:{{hist_height}}" title="06AM"><div class="hour_req_container"><p class="hour_req"></p></div></div>
+					<div id="{{server}}_history_07" class="history_box" style="height:{{hist_height}}" title="07AM"><div class="hour_req_container"><p class="hour_req"></p></div></div>
+					<div id="{{server}}_history_08" class="history_box" style="height:{{hist_height}}" title="08AM"><div class="hour_req_container"><p class="hour_req"></p></div></div>
+					<div id="{{server}}_history_09" class="history_box" style="height:{{hist_height}}" title="09AM"><div class="hour_req_container"><p class="hour_req"></p></div></div>
+					<div id="{{server}}_history_10" class="history_box" style="height:{{hist_height}}" title="10AM"><div class="hour_req_container"><p class="hour_req"></p></div></div>
+					<div id="{{server}}_history_11" class="history_box" style="height:{{hist_height}}" title="11AM"><div class="hour_req_container"><p class="hour_req"></p></div></div>
+					<div id="{{server}}_history_12" class="history_box" style="height:{{hist_height}}" title="12PM"><div class="hour_req_container"><p class="hour_req"></p></div></div>
+					<div id="{{server}}_history_13" class="history_box" style="height:{{hist_height}}" title="01PM"><div class="hour_req_container"><p class="hour_req"></p></div></div>
+					<div id="{{server}}_history_14" class="history_box" style="height:{{hist_height}}" title="02PM"><div class="hour_req_container"><p class="hour_req"></p></div></div>
+					<div id="{{server}}_history_15" class="history_box" style="height:{{hist_height}}" title="03PM"><div class="hour_req_container"><p class="hour_req"></p></div></div>
+					<div id="{{server}}_history_16" class="history_box" style="height:{{hist_height}}" title="04PM"><div class="hour_req_container"><p class="hour_req"></p></div></div>
+					<div id="{{server}}_history_17" class="history_box" style="height:{{hist_height}}" title="05PM"><div class="hour_req_container"><p class="hour_req"></p></div></div>
+					<div id="{{server}}_history_18" class="history_box" style="height:{{hist_height}}" title="06PM"><div class="hour_req_container"><p class="hour_req"></p></div></div>
+					<div id="{{server}}_history_19" class="history_box" style="height:{{hist_height}}" title="07PM"><div class="hour_req_container"><p class="hour_req"></p></div></div>
+					<div id="{{server}}_history_20" class="history_box" style="height:{{hist_height}}" title="08PM"><div class="hour_req_container"><p class="hour_req"></p></div></div>
+					<div id="{{server}}_history_21" class="history_box" style="height:{{hist_height}}" title="09PM"><div class="hour_req_container"><p class="hour_req"></p></div></div>
+					<div id="{{server}}_history_22" class="history_box" style="height:{{hist_height}}" title="10PM"><div class="hour_req_container"><p class="hour_req"></p></div></div>
+					<div id="{{server}}_history_23" class="history_box" style="height:{{hist_height}}" title="11PM"><div class="hour_req_container"><p class="hour_req"></p></div></div>
+
+				</div>
+				
+				<div class="controls col-lg-12 col-md-12 col-sm-12">
+					<button class="control_button btn-default " ng-click="startHistory()" ng-disabled="{{server + '_history_loaded'}}">Load History</button>
+				</div>
+				<!-- ng-click="restartApp()" -->
+				<div class="controls col-lg-12 col-md-12 col-sm-12" ng-show="dba_admin">
+					<button class="restart_app control_button btn-default " ng-click="restartButtonClick()">Restart App</button>
+					<!--<button class="reboot_server control_button btn-default ">Reboot Server</button>-->
+					<button id="{{server}}_error_log" class="logs_button control_button btn-default ">Error Log</button>
+				</div>
+			</div>
+		</script>
+		
+	</head>
+	<body ng-app='watcher'>
+		
+		<div ng-controller = 'watcherCtrl'>
+			<h2>Locate Application Servers</h2>
+			
+			
+			<!--<p>{{dateTime}}</p>-->
+			<div class=" col-lg-12 col-md-12 col-sm-12">
+				<div class="col-lg-3 col-md-3 col-sm-12">
+					<input id='date_picker' type="text" class="form-control" ng-model='watcher_date'/>
+				</div>
+			</div>
+				
+			<div class=" col-lg-12 col-md-12 col-sm-12">
+				<h3>Production</h3>
+				
+				<!-- PRIMARY -->
+				<div id="primary_group" class="server_group col-lg-3 col-md-3 col-sm-12">
+					<h4 class="group_title">Primary</h4>
+					<div class="my-container col-lg-12 col-md-12 col-sm-12" ng-repeat="prim in primary">
+						<server-monitor env="production" server="{{prim.server}}" monitor_id="{{prim.sys_id}}" ></server-monitor>
+
+						<!-- Modal -->
+
+						<div id="{{prim.server}}_modal"  class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+						  <div  class="modal-dialog modal-sm">
+							<div class="modal-content">
+								<p class="modal_title">{{prim.server}}</p>
+
+								<div id="{{prim.server}}_logs"></div>
+							</div>
+						  </div>
+						</div>
+						<!-- Modal -->
+						<div class="modal fade" id="confirmModal_{{prim.server}}" role="dialog">
+							<div class="modal-dialog">
+
+							  <div class="modal-content">
+								<div class="modal-header confirm-header">
+								  <button type="button" class="close btn-default" data-dismiss="modal">X</button>
+								  <h3 class="modal-title">Are You Sure?</h3>
+
+								</div>
+								<div class="modal-body">
+									 <h4>Clicking "Yes" will Restart the Locate Application</h4>
+
+								</div>
+								<div class="modal-footer">
+								  <button id="confirm_close_{{prim.server}}" class="btn-default confirm_restart" data-dismiss="modal">Yes</button>
+								  <button class="btn-default" data-dismiss="modal">No</button>
+								</div>
+							  </div>
+
+							</div>
+						</div>
+
+					</div>
+				</div>
+				
+				<!-- PRIMARY -->
+				
+				<!-- INTERNAL -->
+				<div id="internal_group" class="server_group col-lg-8 col-md-8 col-sm-12">
+					<h4 class="group_title">Retail</h4>
+					<div class="my-container col-lg-4 col-md-4 col-sm-12" ng-repeat="inter in internal">
+						<server-monitor env="production" server="{{inter.server}}" monitor_id="{{inter.sys_id}}"></server-monitor>
+
+						<!-- Modal -->
+
+						<div id="{{inter.server}}_modal"  class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+						  <div  class="modal-dialog modal-sm">
+							<div class="modal-content">
+								<p class="modal_title">{{inter.server}}</p>
+
+								<div id="{{inter.server}}_logs"></div>
+							</div>
+						  </div>
+						</div>
+						<!-- Modal -->
+						<div class="modal fade" id="confirmModal_{{inter.server}}" role="dialog">
+							<div class="modal-dialog">
+
+							  <div class="modal-content">
+								<div class="modal-header confirm-header">
+								  <button  type="button" class="close btn-default" data-dismiss="modal">X</button>
+								  <h3 class="modal-title">Are You Sure?</h3>
+
+								</div>
+								<div class="modal-body">
+									 <h4>Clicking "Yes" will Restart the Locate Application</h4>
+
+								</div>
+								<div class="modal-footer">
+								  <button id="confirm_close_{{inter.server}}" class="btn-default confirm_restart" data-dismiss="modal">Yes</button>
+								  <button class="btn-default" data-dismiss="modal">No</button>
+								</div>
+							  </div>
+
+							</div>
+						</div>
+
+					</div>
+				</div>
+				<!-- INTERNAL -->
+				
+				<!-- EXTERNAL -->
+				<div id="external_group" class="server_group col-lg-11 col-md-11 col-sm-11">
+					<h4 class="group_title">Ecomm</h4>
+					
+					<div class="my-container col-lg-15 col-md-15 col-sm-15" ng-repeat="exter in external">
+						<server-monitor env="production" server="{{exter.server}}" monitor_id="{{exter.sys_id}}"></server-monitor>
+
+						<!-- Modal -->
+
+						<div id="{{exter.server}}_modal"  class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+						  <div  class="modal-dialog modal-sm">
+							<div class="modal-content">
+								<p class="modal_title">{{exter.server}}</p>
+
+								<div id="{{exter.server}}_logs"></div>
+							</div>
+						  </div>
+						</div>
+						<!-- Modal -->
+						<div class="modal fade" id="confirmModal_{{exter.server}}" role="dialog">
+							<div class="modal-dialog">
+
+							  <div class="modal-content">
+								<div class="modal-header confirm-header">
+								  <button type="button" class="close btn-default" data-dismiss="modal">X</button>
+								  <h3 class="modal-title">Are You Sure?</h3>
+
+								</div>
+								<div class="modal-body">
+									 <h4>Clicking "Yes" will Restart the Locate Application</h4>
+
+								</div>
+								<div class="modal-footer">
+								  <button id="confirm_close_{{exter.server}}" class="btn-default confirm_restart" data-dismiss="modal">Yes</button>
+								  <button class="btn-default" data-dismiss="modal">No</button>
+								</div>
+							  </div>
+
+							</div>
+						</div>
+
+					</div>
+					
+				</div>
+				<!-- EXTERNAL -->
+				
+				<!-- AVAILABLE -->
+				<div id="available_group" class="server_group col-lg-3 col-md-3 col-sm-12">
+					<h4 class="group_title">Available Pool</h4>
+					<div class="my-container col-lg-12 col-md-12 col-sm-12" ng-repeat="avail in available">
+						<server-monitor env="production" server="{{avail.server}}" monitor_id="{{avail.sys_id}}"></server-monitor>
+
+						<!-- Modal -->
+
+						<div id="{{avail.server}}_modal"  class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+						  <div  class="modal-dialog modal-sm">
+							<div class="modal-content">
+								<p class="modal_title">{{avail.server}}</p>
+
+								<div id="{{avail.server}}_logs"></div>
+							</div>
+						  </div>
+						</div>
+						
+						<!-- Modal -->
+						<div class="modal fade" id="confirmModal_{{avail.server}}" role="dialog">
+							<div class="modal-dialog">
+
+							  <div class="modal-content">
+								<div class="modal-header confirm-header">
+								  <button type="button" class="close btn-default" data-dismiss="modal">X</button>
+								  <h3 class="modal-title">Are You Sure?</h3>
+
+								</div>
+								<div class="modal-body">
+									 <h4>Clicking "Yes" will Restart the Locate Application</h4>
+
+								</div>
+								<div class="modal-footer">
+								  <button id="confirm_close_{{avail.server}}" class="btn-default confirm_restart" data-dismiss="modal">Yes</button>
+								  <button class="btn-default" data-dismiss="modal">No</button>
+								</div>
+							  </div>
+
+							</div>
+						</div>
+
+					</div>
+				</div>
+				<!-- AVAILABLE -->
+				
+			</div>
+		
+			
+			<div id="test_button" class="col-lg-12 col-md-12 col-sm-12">
+				<button ng-click="show_test()">+</button>
+			</div>
+			
+			
+			<div id='test_env' ng-show="showTest" class="col-lg-12 col-md-12 col-sm-12">
+				<h4>Test</h4>
+				<div class="my-container col-lg-2 col-md-2 col-sm-12" ng-repeat="tst in test_monitors">
+					<server-monitor env="test" server="{{tst.server}}"></server-monitor>
+					<!-- Modal -->
+					<div class="modal fade" id="confirmModal_{{tst.server}}" role="dialog">
+						<div class="modal-dialog">
+
+						  <div class="modal-content">
+							<div class="modal-header confirm-header">
+							  <button type="button" class="close btn-default" data-dismiss="modal">X</button>
+							  <h3 class="modal-title">Are You Sure?</h3>
+
+							</div>
+							<div class="modal-body">
+								 <h4>Clicking "Yes" will Restart the Locate Application</h4>
+
+							</div>
+							<div class="modal-footer">
+							  <button id="confirm_close_{{tst.server}}" class="btn-default confirm_restart" data-dismiss="modal">Yes</button>
+							  <button class="btn-default" data-dismiss="modal">No</button>
+							</div>
+						  </div>
+
+						</div>
+					</div>
+				</div>
+			</div>	
+			
+		</div>
+	</body>
+</j:jelly>]]></html>
+        <name>locate_monitor_page</name>
+        <processing_script/>
+        <sys_class_name>sys_ui_page</sys_class_name>
+        <sys_created_by>sebgar01</sys_created_by>
+        <sys_created_on>2016-08-29 12:51:22</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>ca5cdfd52ba9e20045eeaacc17da154f</sys_id>
+        <sys_mod_count>959</sys_mod_count>
+        <sys_name>locate_monitor_page</sys_name>
+        <sys_package display_value="Watcher" source="x_kasp_watcher">8eb44d282bad620045eeaacc17da152f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Watcher">8eb44d282bad620045eeaacc17da152f</sys_scope>
+        <sys_update_name>sys_ui_page_ca5cdfd52ba9e20045eeaacc17da154f</sys_update_name>
+        <sys_updated_by>sebgar01</sys_updated_by>
+        <sys_updated_on>2017-03-13 17:46:28</sys_updated_on>
+    </sys_ui_page>
+</record_update>

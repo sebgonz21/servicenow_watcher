@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database>
+    <element label="Server Logs" max_length="40" name="x_kasp_watcher_server_logs" sizeclass="7090" type="collection">
+        <element label="Log File" max_length="100" name="log_file" type="string"/>
+        <element label="Log Line" max_length="4000" name="log_line" type="string"/>
+        <element label="Server" max_length="100" name="server" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Timestamp" max_length="100" name="timestamp" type="string"/>
+    </element>
+</database>

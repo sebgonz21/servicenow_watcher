@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sysauto_script">
+    <sysauto_script action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <condition/>
+        <conditional>false</conditional>
+        <name>Create Get Certficate Info</name>
+        <run_as display_value="Admin ">fa14b1e9133d9a0053dc71522244b0be</run_as>
+        <run_as_tz/>
+        <run_dayofmonth>1</run_dayofmonth>
+        <run_dayofweek>1</run_dayofweek>
+        <run_period>1970-01-02 00:00:00</run_period>
+        <run_start>2017-01-06 17:35:56</run_start>
+        <run_time>1970-01-01 05:00:00</run_time>
+        <run_type>periodically</run_type>
+        <script><![CDATA[(function(){
+	
+	var monitor = new GlideRecord('x_kasp_watcher_monitors');
+	monitor.addQuery('monitor',true);
+	monitor.addQuery('certificate',true);
+	monitor.query();
+	
+	var certPath;
+	var monitorEvent;
+	
+	while(monitor.next()){
+		certPath = monitor.getValue('certificate_path');
+		monitorEvent = new GlideRecord('x_kasp_watcher_watcher_events');
+		monitorEvent.setValue('server',monitor.server);
+		monitorEvent.setValue('monitor',monitor.sys_id);
+		monitorEvent.setValue('type','cert_info@'+certPath);
+		monitorEvent.insert();
+		
+	}
+	
+	
+	
+})();]]></script>
+        <sys_class_name>sysauto_script</sys_class_name>
+        <sys_created_by>sebgar01</sys_created_by>
+        <sys_created_on>2016-11-29 17:37:12</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>8a22928f1393e64053dc51522244b0ce</sys_id>
+        <sys_mod_count>30</sys_mod_count>
+        <sys_name>Create Get Certficate Info</sys_name>
+        <sys_package display_value="Watcher" source="x_kasp_watcher">8eb44d282bad620045eeaacc17da152f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Watcher">8eb44d282bad620045eeaacc17da152f</sys_scope>
+        <sys_update_name>sysauto_script_8a22928f1393e64053dc51522244b0ce</sys_update_name>
+        <sys_updated_by>sebgar01</sys_updated_by>
+        <sys_updated_on>2017-03-16 17:13:10</sys_updated_on>
+        <upgrade_safe>false</upgrade_safe>
+    </sysauto_script>
+</record_update>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update sys_domain="global" table="sys_script">
+    <sys_script action="INSERT_OR_UPDATE">
+        <abort_action>false</abort_action>
+        <access>package_private</access>
+        <action_delete>false</action_delete>
+        <action_insert>true</action_insert>
+        <action_label/>
+        <action_name/>
+        <action_query>false</action_query>
+        <action_run_at>server</action_run_at>
+        <action_update>false</action_update>
+        <active>true</active>
+        <add_message>false</add_message>
+        <advanced>true</advanced>
+        <application/>
+        <change_fields>false</change_fields>
+        <client_callable>false</client_callable>
+        <collection>x_kasp_watcher_watcher_events</collection>
+        <condition/>
+        <description/>
+        <execute_function>false</execute_function>
+        <filter_condition/>
+        <is_rest>false</is_rest>
+        <message/>
+        <name>Avg DB Time Calculator</name>
+        <onclick/>
+        <order>100</order>
+        <priority>100</priority>
+        <read_access_action>false</read_access_action>
+        <rest_method/>
+        <rest_method_text/>
+        <rest_service/>
+        <rest_service_text/>
+        <rest_variables/>
+        <role_conditions/>
+        <script><![CDATA[(function executeRule(current, previous /*null when async*/) {
+	
+	if(current == null || current.getValue('type') != "avg_db_time"){
+		return;
+	}
+	//gs.info("Running async rule " +current.server);
+	var monitor = new GlideRecord('x_kasp_watcher_monitors');
+	monitor.get(current.getValue('monitor'));
+	
+	var server = monitor.getValue('server');
+	
+	
+	
+	var today = new Date();
+	today.setTime(today.getTime() + 10800000); //add 3 hours
+	var year = today.getFullYear();
+	var month = ((today.getMonth()+1) < 10) ? "0" + (today.getMonth()+1):(today.getMonth() + 1);
+	var day = (today.getDate() <10) ? "0"+today.getDate():today.getDate();
+	
+	var fullDate = year + '-' + month+ '-' +day;
+	
+	var log = new GlideRecord('x_kasp_watcher_server_logs');
+	log.addQuery('timestamp','STARTSWITH',fullDate);
+	log.addQuery('server',server);
+	log.addQuery('log_line','CONTAINS','Time span for online db request');
+	log.query();
+	var count = 0;
+	var sum = 0;
+	var avg = 0;
+	var time = 0;
+	var line;
+	//gs.info('WATCHER>>>>> '+ server +' log num '+log.getRowCount());
+	
+	
+	while(log.next()){
+		line = log.getValue('log_line');
+	
+		if(line.indexOf('=') > 0){
+			line = line.substring(line.indexOf('='));
+			
+			if(line.length > 2){
+				line = line.substring(2);
+				
+				if(line.indexOf(' ') > 0){
+					line = line.substring(0,line.indexOf(' '));
+				}
+
+				time = parseFloat(line);
+
+				sum += time;
+				count++;
+			}else{
+				continue;
+			}
+			
+			
+		}else{
+			continue;
+		}
+	
+	}
+
+	
+	avg = sum/count;
+	avg = avg.toFixed(3);	
+	count = count.toFixed(0);
+	monitor.setValue('db_requests',count);
+	monitor.setValue('avg_db_request_time',avg);
+	monitor.update();
+	
+	current.deleteRecord();
+	
+})(current, previous);]]></script>
+        <sys_class_name>sys_script</sys_class_name>
+        <sys_created_by>sebgar01</sys_created_by>
+        <sys_created_on>2016-11-29 17:41:26</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_id>e66356cf1393e64053dc51522244b0d3</sys_id>
+        <sys_mod_count>47</sys_mod_count>
+        <sys_name>Avg DB Time Calculator</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Watcher" source="x_kasp_watcher">8eb44d282bad620045eeaacc17da152f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Watcher">8eb44d282bad620045eeaacc17da152f</sys_scope>
+        <sys_update_name>sys_script_e66356cf1393e64053dc51522244b0d3</sys_update_name>
+        <sys_updated_by>sebgar01</sys_updated_by>
+        <sys_updated_on>2017-02-13 22:58:27</sys_updated_on>
+        <template/>
+        <when>async</when>
+    </sys_script>
+</record_update>

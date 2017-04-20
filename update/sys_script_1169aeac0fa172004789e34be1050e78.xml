@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update sys_domain="global" table="sys_script">
+    <sys_script action="INSERT_OR_UPDATE">
+        <abort_action>false</abort_action>
+        <access>package_private</access>
+        <action_delete>false</action_delete>
+        <action_insert>true</action_insert>
+        <action_label/>
+        <action_name/>
+        <action_query>false</action_query>
+        <action_run_at>server</action_run_at>
+        <action_update>false</action_update>
+        <active>true</active>
+        <add_message>false</add_message>
+        <advanced>true</advanced>
+        <application/>
+        <change_fields>false</change_fields>
+        <client_callable>false</client_callable>
+        <collection>x_kasp_watcher_watcher_events</collection>
+        <condition/>
+        <description/>
+        <execute_function>false</execute_function>
+        <filter_condition/>
+        <is_rest>false</is_rest>
+        <message/>
+        <name>DB Request Consolidator</name>
+        <onclick/>
+        <order>100</order>
+        <priority>100</priority>
+        <read_access_action>false</read_access_action>
+        <rest_method/>
+        <rest_method_text/>
+        <rest_service/>
+        <rest_service_text/>
+        <rest_variables/>
+        <role_conditions/>
+        <script><![CDATA[(function executeRule(current, previous /*null when async*/) {
+
+	if(current == null || current.getValue('type') != "db_req_cons"){
+		return;
+	}
+	
+	var server = current.getValue('server');
+	
+	var gdt = new GlideDateTime();
+	var today = gdt.getLocalDate();
+	var hour = gdt.getLocalTime().getByFormat('H');
+	var currentHour = 0;
+	var stringHour; //Used add so leading zero can be added to hours < 10
+	
+	var log;
+	var consolidatedHist;
+	var reqs = 0;
+	
+	while(currentHour <= hour){
+		stringHour = (currentHour < 10) ? "0"+currentHour:currentHour.toFixed(0);
+		
+		log = new GlideRecord('x_kasp_watcher_server_logs');
+		log.addQuery('server',server);
+		log.addQuery('timestamp','STARTSWITH',today + ' ' + stringHour);
+		log.addQuery('log_line','CONTAINS','Time span for online db request');
+		log.query();
+		
+		if(log.next()){
+			
+			reqs = log.getRowCount();
+			//gs.info('FOUND ' + reqs + " requets for server " + server + " on hour " + stringHour);
+		}
+		
+		consolidatedHist = new GlideRecord('x_kasp_watcher_consolidated_history');
+		consolidatedHist.addQuery('server',server);
+		consolidatedHist.addQuery('date',today);
+		consolidatedHist.addQuery('hour',stringHour);
+		consolidatedHist.query();
+		
+		if(!consolidatedHist.next()){
+			consolidatedHist = new GlideRecord('x_kasp_watcher_consolidated_history');
+			consolidatedHist.setValue('server',server);
+			consolidatedHist.setValue('date',today);
+			consolidatedHist.setValue('hour',stringHour);
+			consolidatedHist.insert();
+		}
+		
+		consolidatedHist.setValue('requests',reqs.toFixed(0));
+		consolidatedHist.update();
+		reqs = 0;
+		currentHour++;
+	}
+	
+	current.deleteRecord();
+
+})(current, previous);]]></script>
+        <sys_class_name>sys_script</sys_class_name>
+        <sys_created_by>sebgar01</sys_created_by>
+        <sys_created_on>2017-03-13 21:13:55</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_domain>global</sys_domain>
+        <sys_id>1169aeac0fa172004789e34be1050e78</sys_id>
+        <sys_mod_count>7</sys_mod_count>
+        <sys_name>DB Request Consolidator</sys_name>
+        <sys_overrides/>
+        <sys_package display_value="Watcher" source="x_kasp_watcher">8eb44d282bad620045eeaacc17da152f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Watcher">8eb44d282bad620045eeaacc17da152f</sys_scope>
+        <sys_update_name>sys_script_1169aeac0fa172004789e34be1050e78</sys_update_name>
+        <sys_updated_by>sebgar01</sys_updated_by>
+        <sys_updated_on>2017-03-14 20:34:07</sys_updated_on>
+        <template/>
+        <when>async</when>
+    </sys_script>
+</record_update>

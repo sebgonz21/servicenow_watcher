@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database>
+    <element label="Monitors" max_length="40" name="x_kasp_watcher_monitors" type="collection">
+        <element attributes="edge_encryption_enabled=true" label="Active Connections" max_length="40" name="active_connections" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Application" max_length="40" name="application" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Avg DB Request Time" max_length="40" name="avg_db_request_time" type="string"/>
+        <element label="Behind Firewall" max_length="40" name="behind_firewall" type="boolean"/>
+        <element label="Certificate" max_length="40" name="certificate" type="boolean"/>
+        <element attributes="edge_encryption_enabled=true" label="Certificate Path" max_length="100" name="certificate_path" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Cert Expiration" max_length="40" name="cert_expiration" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="CPU" max_length="100" name="cpu" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="CPU Util %" max_length="40" name="cpu_util" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="DB Requests" max_length="40" name="db_requests" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Drives" max_length="200" name="drives" type="string"/>
+        <element attributes="edge_encryption_enabled=true" choice="1" label="Environment" max_length="40" name="environment" type="string">
+            <choice>
+                <element label="Production" sequence="0" value="production"/>
+                <element label="Test" sequence="1" value="test"/>
+                <element label="Dev" sequence="2" value="dev"/>
+            </choice>
+        </element>
+        <element attributes="edge_encryption_enabled=true" label="Free Disk" max_length="40" name="free_disk" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Free Disk Space (%)" max_length="40" name="free_disk_space" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Free RAM" max_length="40" name="free_ram" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Group" max_length="40" name="group" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Hourly Requests" max_length="40" name="hourly_requests" type="string"/>
+        <element label="HTTP" max_length="40" name="http" type="boolean"/>
+        <element label="Last Check" max_length="40" name="last_check" type="glide_date_time"/>
+        <element label="Logs" max_length="40" name="logs" type="boolean"/>
+        <element attributes="edge_encryption_enabled=true" label="Log File" max_length="100" name="log_file" type="string"/>
+        <element label="Monitor" max_length="40" name="monitor" type="boolean"/>
+        <element attributes="edge_encryption_enabled=true" label="Network" max_length="100" name="network" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="OS" max_length="100" name="os" type="string"/>
+        <element label="Performance" max_length="40" name="performance" type="boolean"/>
+        <element attributes="edge_encryption_enabled=true" label="RAM" max_length="100" name="ram" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="RAM (MB)" max_length="40" name="ram_mb" type="string"/>
+        <element label="Restart App" max_length="40" name="restart_app" type="boolean"/>
+        <element display="true" label="Server" max_length="100" name="server" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Status" max_length="40" name="status" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Total Disk" max_length="40" name="total_disk" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Total RAM" max_length="40" name="total_ram" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="Type" max_length="40" name="type" type="string"/>
+        <element attributes="edge_encryption_enabled=true" label="URL" max_length="100" name="url" type="string"/>
+    </element>
+</database>

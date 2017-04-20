@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_script_email">
+    <sys_script_email action="INSERT_OR_UPDATE">
+        <name>locate_hourly_summary</name>
+        <new_lines_to_html>false</new_lines_to_html>
+        <script><![CDATA[(function runMailScript(current, template, email, email_action, event) {
+
+	
+	
+	template.print("<style>");
+	template.print('table, td { ');
+		template.print('border: 1px solid black;'); 
+		template.print('border-collapse: collapse;');
+		template.print('font-family:Verdana;');
+		template.print('font-size: 15px;');
+		template.print('font-weight: bold;');
+		template.print('padding:0px 5px 0px 5px;');
+		template.print('table-layout:auto;');
+	template.print('}');
+	
+	template.print('th{');
+		template.print('background-color:#4491FA;');
+		template.print('color:white;');
+	template.print('}');
+	
+	template.print("td{"+
+			"padding: 3px;"+
+			"text-align:center;"+
+			"font-family:'Verdana';"+
+			"font-weight:bold;"+
+			"font-size: 12px;"+
+		"}");
+	
+	template.print(".up{"+
+			"color:green;"+
+		"}"+
+		".down{"+
+			"color:red;"+
+		"}"+
+		".timeout{"+
+			"color:#FFC300;"+
+		"}"
+	);
+	template.print("</style>");
+	
+	var date = new GlideDateTime();
+	email.setSubject("Locate Servers Hourly Summary " + date.getDisplayValue());
+	
+	template.print("Locate Server Status " + date.getDisplayValue());
+	template.print("<br>");
+	template.print("<table>");
+	template.print("<thead><tr><th>Sever</th><th>Status</th></tr></thead>");
+	template.print("<tbody>");
+	
+	var monitor = new GlideRecord('x_kasp_watcher_monitors');
+	monitor.addQuery('environment','production');
+	monitor.addQuery('monitor',true);
+	monitor.orderBy('server');
+	monitor.query();
+	var status;
+	var server;
+	var status_tag;
+	
+	while(monitor.next()){
+	
+		server = monitor.getValue('server');
+		status = monitor.getValue('status');
+		if(status == "200"){
+			status_tag = "<td class='up'>UP</td>";
+		}else if(status == "0"){
+			status_tag = "<td class='down'>DOWN</td>";
+		}else{
+			status_tag = "<td class='timeout'>timeout</td>";
+		}
+		
+		template.print("<tr>");
+		template.print("<td>"+server+"</td>");
+		template.print(status_tag);
+		template.print("</tr>");
+	}
+	template.print("</tbody>");
+	template.print("</table>");
+	
+	
+})(current, template, email, email_action, event);]]></script>
+        <sys_class_name>sys_script_email</sys_class_name>
+        <sys_created_by>sebgar01</sys_created_by>
+        <sys_created_on>2016-11-22 14:50:00</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>3fb421b0135bee0053dc51522244b0d7</sys_id>
+        <sys_mod_count>21</sys_mod_count>
+        <sys_name>locate_hourly_summary</sys_name>
+        <sys_package display_value="Watcher" source="x_kasp_watcher">8eb44d282bad620045eeaacc17da152f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Watcher">8eb44d282bad620045eeaacc17da152f</sys_scope>
+        <sys_update_name>sys_script_email_3fb421b0135bee0053dc51522244b0d7</sys_update_name>
+        <sys_updated_by>sebgar01</sys_updated_by>
+        <sys_updated_on>2017-01-31 19:08:37</sys_updated_on>
+    </sys_script_email>
+</record_update>

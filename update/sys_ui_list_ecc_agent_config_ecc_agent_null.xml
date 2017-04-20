@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update>
+    <sys_ui_list parent="ecc_agent" relationship="" sys_domain="global" table="ecc_agent_config" version="2" view="">
+        <sys_ui_list action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element/>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <name>ecc_agent_config</name>
+            <parent>ecc_agent</parent>
+            <position/>
+            <relationship/>
+            <sum>false</sum>
+            <sys_class_name>sys_ui_list</sys_class_name>
+            <sys_created_by>sebgar01</sys_created_by>
+            <sys_created_on>2016-12-07 16:52:45</sys_created_on>
+            <sys_customer_update>true</sys_customer_update>
+            <sys_domain>global</sys_domain>
+            <sys_id>53f457ed0fa722004789e34be1050eef</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>ecc_agent_config</sys_name>
+            <sys_package display_value="Watcher" source="x_kasp_watcher">8eb44d282bad620045eeaacc17da152f</sys_package>
+            <sys_policy/>
+            <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+            <sys_scope display_value="Watcher">8eb44d282bad620045eeaacc17da152f</sys_scope>
+            <sys_update_name>sys_ui_list_ecc_agent_config_ecc_agent_null</sys_update_name>
+            <sys_updated_by>sebgar01</sys_updated_by>
+            <sys_updated_on>2016-12-07 16:52:45</sys_updated_on>
+            <sys_user display_value="Sebastian Gonzalez-Garcia">96e7c5caf58e0100649946d7569884b1</sys_user>
+            <view display_value="Default view" name="NULL">Default view</view>
+            <view_name/>
+        </sys_ui_list>
+    </sys_ui_list>
+</record_update>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database>
+    <element label="Consolidated History" max_length="40" name="x_kasp_watcher_consolidated_history" sizeclass="5146" type="collection">
+        <element label="Date" max_length="40" name="date" type="string"/>
+        <element label="Hour" max_length="40" name="hour" type="string"/>
+        <element label="Requests" max_length="40" name="requests" type="string"/>
+        <element label="Server" max_length="100" name="server" type="string"/>
+        <element label="Status" max_length="40" name="status" type="string"/>
+    </element>
+</database>

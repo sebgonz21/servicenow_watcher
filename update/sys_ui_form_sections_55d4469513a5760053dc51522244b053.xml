@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update>
+    <sys_ui_form_sections form_id="55d4469513a5760053dc51522244b053" sys_domain="global" table="x_kasp_watcher_monitors" version="3">
+        <sys_ui_form_section action="INSERT_OR_UPDATE">
+            <position>0</position>
+            <sys_created_by>sebgar01</sys_created_by>
+            <sys_created_on>2017-03-16 02:29:37</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_id>19d4469513a5760053dc51522244b053</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_overrides/>
+            <sys_ui_form display_value="x_kasp_watcher_monitors" name="x_kasp_watcher_monitors" sys_domain="global" view="Default view">55d4469513a5760053dc51522244b053</sys_ui_form>
+            <sys_ui_section caption="NULL" display_value="" name="x_kasp_watcher_monitors" sys_domain="global" view="Default view">ef4b01602bed620045eeaacc17da15a3</sys_ui_section>
+            <sys_updated_by>sebgar01</sys_updated_by>
+            <sys_updated_on>2017-03-16 02:29:37</sys_updated_on>
+        </sys_ui_form_section>
+        <sys_ui_form_section action="INSERT_OR_UPDATE">
+            <position>1</position>
+            <sys_created_by>sebgar01</sys_created_by>
+            <sys_created_on>2017-03-16 02:29:37</sys_created_on>
+            <sys_domain>global</sys_domain>
+            <sys_id>ddd4469513a5760053dc51522244b053</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_overrides/>
+            <sys_ui_form display_value="x_kasp_watcher_monitors" name="x_kasp_watcher_monitors" sys_domain="global" view="Default view">55d4469513a5760053dc51522244b053</sys_ui_form>
+            <sys_ui_section caption="Options" display_value="Options" name="x_kasp_watcher_monitors" sys_domain="global" view="Default view">d9d4469513a5760053dc51522244b053</sys_ui_section>
+            <sys_updated_by>sebgar01</sys_updated_by>
+            <sys_updated_on>2017-03-16 02:29:37</sys_updated_on>
+        </sys_ui_form_section>
+        <sys_ui_form action="INSERT_OR_UPDATE">
+            <name>x_kasp_watcher_monitors</name>
+            <roles/>
+            <sys_class_name>sys_ui_form</sys_class_name>
+            <sys_created_by>sebgar01</sys_created_by>
+            <sys_created_on>2017-03-16 02:29:37</sys_created_on>
+            <sys_customer_update>false</sys_customer_update>
+            <sys_domain>global</sys_domain>
+            <sys_id>55d4469513a5760053dc51522244b053</sys_id>
+            <sys_mod_count>5</sys_mod_count>
+            <sys_name>x_kasp_watcher_monitors</sys_name>
+            <sys_overrides/>
+            <sys_package display_value="Watcher" source="x_kasp_watcher">8eb44d282bad620045eeaacc17da152f</sys_package>
+            <sys_policy/>
+            <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+            <sys_scope display_value="Watcher">8eb44d282bad620045eeaacc17da152f</sys_scope>
+            <sys_update_name>sys_ui_form_sections_55d4469513a5760053dc51522244b053</sys_update_name>
+            <sys_updated_by>sebgar01</sys_updated_by>
+            <sys_updated_on>2017-03-17 13:51:03</sys_updated_on>
+            <sys_user/>
+            <view display_value="Default view" name="NULL">Default view</view>
+            <view_name/>
+        </sys_ui_form>
+    </sys_ui_form_sections>
+</record_update>

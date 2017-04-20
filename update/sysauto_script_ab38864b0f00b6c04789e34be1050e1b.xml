@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sysauto_script">
+    <sysauto_script action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <condition/>
+        <conditional>false</conditional>
+        <name>Average DB request Time</name>
+        <run_as display_value="Admin ">fa14b1e9133d9a0053dc71522244b0be</run_as>
+        <run_as_tz/>
+        <run_dayofmonth>1</run_dayofmonth>
+        <run_dayofweek>1</run_dayofweek>
+        <run_period>1970-01-01 00:01:00</run_period>
+        <run_start>2017-01-05 23:42:43</run_start>
+        <run_time>1970-01-01 05:01:00</run_time>
+        <run_type>periodically</run_type>
+        <script><![CDATA[(function(){
+
+	var monitor = new GlideRecord('x_kasp_watcher_monitors');
+    monitor.addQuery('monitor',true);
+	monitor.addQuery('application','Locate');
+	monitor.query();
+	
+	var monitorEvent;
+	
+	while(monitor.next()){
+		
+		monitorEvent = new GlideRecord('x_kasp_watcher_watcher_events');
+		monitorEvent.setValue('server',monitor.server);
+		monitorEvent.setValue('monitor',monitor.sys_id);
+		monitorEvent.setValue('type','avg_db_time');
+		monitorEvent.insert();
+		
+	}
+})();]]></script>
+        <sys_class_name>sysauto_script</sys_class_name>
+        <sys_created_by>sebgar01</sys_created_by>
+        <sys_created_on>2017-01-05 23:40:52</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>ab38864b0f00b6c04789e34be1050e1b</sys_id>
+        <sys_mod_count>5</sys_mod_count>
+        <sys_name>Average DB request Time</sys_name>
+        <sys_package display_value="Watcher" source="x_kasp_watcher">8eb44d282bad620045eeaacc17da152f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Watcher">8eb44d282bad620045eeaacc17da152f</sys_scope>
+        <sys_update_name>sysauto_script_ab38864b0f00b6c04789e34be1050e1b</sys_update_name>
+        <sys_updated_by>sebgar01</sys_updated_by>
+        <sys_updated_on>2017-03-16 13:49:54</sys_updated_on>
+        <upgrade_safe>false</upgrade_safe>
+    </sysauto_script>
+</record_update>

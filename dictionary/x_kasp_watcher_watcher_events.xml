@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database>
+    <element label="Watcher Events" max_length="40" name="x_kasp_watcher_watcher_events" sizeclass="6290" type="collection">
+        <element label="Monitor" max_length="32" name="monitor" reference="x_kasp_watcher_monitors" type="reference"/>
+        <element label="Server" max_length="100" name="server" type="string"/>
+        <element label="Type" max_length="100" name="type" type="string"/>
+        <index name="index">
+            <element name="monitor"/>
+        </index>
+    </element>
+</database>

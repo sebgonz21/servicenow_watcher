@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="content_css">
+    <content_css action="INSERT_OR_UPDATE">
+        <name>Watcher_locate_css</name>
+        <style>.my-container{&#13;
+    border: 0.5px solid black;&#13;
+    padding: 0;&#13;
+    margin-bottom: 2em;&#13;
+    &#13;
+}&#13;
+.monitor-box{&#13;
+    padding: 0;&#13;
+    min-width: 97px;&#13;
+    &#13;
+}&#13;
+.monitor-container{&#13;
+    padding: 0.5em 0 0.5em 0.2em;&#13;
+    background-color: white;&#13;
+    min-width:80px;&#13;
+}&#13;
+&#13;
+.name_img_box{&#13;
+    text-align:center;&#13;
+    background-color:white;&#13;
+    border-radius: 0.3em;&#13;
+    padding-bottom: 2em;&#13;
+    border-bottom: 0.1em solid grey;&#13;
+    &#13;
+&#13;
+}&#13;
+.server_name{&#13;
+    font-weight:bold;&#13;
+    font-family:Calibri;&#13;
+}&#13;
+.details{&#13;
+    text-align:center;&#13;
+    padding: 0;&#13;
+}&#13;
+&#13;
+&#13;
+.detail_value{&#13;
+    font-weight:bold;&#13;
+    font-family:Calibri;&#13;
+&#13;
+}&#13;
+&#13;
+.detail_label{&#13;
+    font-family:Calibri;&#13;
+    font-size: 12px;&#13;
+&#13;
+}&#13;
+&#13;
+.detail_box{&#13;
+    padding:0;&#13;
+}&#13;
+&#13;
+.date_left{&#13;
+    margin-right:0.2em;&#13;
+}&#13;
+.date_right{&#13;
+    margin-left:0.2em;&#13;
+}&#13;
+&#13;
+.middle_detail_box{&#13;
+    &#13;
+    border-left: 0.1em solid grey;&#13;
+    border-right:0.1em solid grey;&#13;
+}&#13;
+&#13;
+.bottom_details{&#13;
+    border-top: 0.1em solid grey;&#13;
+}&#13;
+&#13;
+&#13;
+&#13;
+table,th,td{&#13;
+    border: 0.5px solid black;&#13;
+}&#13;
+&#13;
+.history-container{&#13;
+    padding: 0;&#13;
+    min-width:10px&#13;
+    max-width:10px&#13;
+}&#13;
+&#13;
+.history_box{&#13;
+    background-color:#CECECE;&#13;
+    &lt;!--width:100%;--&gt;&#13;
+    &lt;!--max-height: 14px;--&gt;&#13;
+    margin:0;&#13;
+    border:0.1px solid white;&#13;
+}&#13;
+.controls{&#13;
+    padding: 0;&#13;
+    background-color:white;&#13;
+}&#13;
+&#13;
+.control_button{&#13;
+    border-radius: 5px;&#13;
+    height:50%;&#13;
+    width:100%;&#13;
+    font-weight:bold;&#13;
+    color:black;&#13;
+    &#13;
+}&#13;
+.modal-dialog{&#13;
+    width:80%;&#13;
+}&#13;
+.modal-content{&#13;
+    padding: 10px;&#13;
+}&#13;
+.modal_title{&#13;
+    font-weight:bold;&#13;
+}&#13;
+&#13;
+#confirmModal{&#13;
+    width:40%;&#13;
+}&#13;
+&#13;
+#test_button{&#13;
+    margin: 2em 0 2em 0;&#13;
+}&#13;
+&#13;
+.server_group{&#13;
+    border: 0.5px solid black;&#13;
+    margin: 1em 1em 1em 1em;&#13;
+    box-shadow: 4px 4px 5px grey;&#13;
+}&#13;
+&#13;
+.group_title{&#13;
+    font-weight:bold;&#13;
+    font-family:"Verdana";&#13;
+    color:white;&#13;
+}&#13;
+&#13;
+#primary_group{&#13;
+    background-color: #0078FF;&#13;
+}&#13;
+#internal_group{&#13;
+    background-color: #009902;&#13;
+}&#13;
+#external_group{&#13;
+    background-color: #2D5687;&#13;
+}&#13;
+#available_group{&#13;
+    background-color: #9D9D9D;&#13;
+}&#13;
+&#13;
+&#13;
+.col-xs-15,&#13;
+.col-sm-15,&#13;
+.col-md-15,&#13;
+.col-lg-15 {&#13;
+    position: relative;&#13;
+    min-height: 1px;&#13;
+}&#13;
+&#13;
+.col-xs-15 {&#13;
+    width: 100%;&#13;
+    float: left;&#13;
+}&#13;
+@media (min-width: 768px) {&#13;
+    .col-sm-15 {&#13;
+        width: 20%;&#13;
+        float: left;&#13;
+    }&#13;
+    .db_stat_left{&#13;
+        border-right: 0.1em solid grey;&#13;
+    }&#13;
+}&#13;
+@media (min-width: 992px) {&#13;
+    .col-md-15 {&#13;
+        width: 20%;&#13;
+        float: left;&#13;
+    }&#13;
+    .db_stat_left{&#13;
+        border-right: 0.1em solid grey;&#13;
+    }&#13;
+    &#13;
+}&#13;
+@media (min-width: 1200px) {&#13;
+    .col-lg-15 {&#13;
+        width: 20%;&#13;
+        float: left;&#13;
+    }&#13;
+    &#13;
+    .db_stat_left{&#13;
+        border-right: 0.1em solid grey;&#13;
+    }&#13;
+    &#13;
+}&#13;
+&#13;
+.hour_req{&#13;
+    color:white;&#13;
+    font-weight: bold;&#13;
+    font-size:11px;&#13;
+    text-align:center;&#13;
+}</style>
+        <sys_class_name>content_css</sys_class_name>
+        <sys_created_by>sebgar01</sys_created_by>
+        <sys_created_on>2017-01-24 16:16:57</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>a54ef58d0f20fa444789e34be1050eb7</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>Watcher_locate_css</sys_name>
+        <sys_package display_value="Watcher" source="x_kasp_watcher">8eb44d282bad620045eeaacc17da152f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Watcher">8eb44d282bad620045eeaacc17da152f</sys_scope>
+        <sys_update_name>content_css_a54ef58d0f20fa444789e34be1050eb7</sys_update_name>
+        <sys_updated_by>sebgar01</sys_updated_by>
+        <sys_updated_on>2017-01-24 16:16:57</sys_updated_on>
+        <type>local</type>
+        <url/>
+    </content_css>
+</record_update>

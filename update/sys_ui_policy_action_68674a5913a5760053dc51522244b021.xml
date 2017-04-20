@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ui_policy_action">
+    <sys_ui_policy_action action="INSERT_OR_UPDATE">
+        <disabled>ignore</disabled>
+        <field>url</field>
+        <mandatory>true</mandatory>
+        <sys_class_name>sys_ui_policy_action</sys_class_name>
+        <sys_created_by>sebgar01</sys_created_by>
+        <sys_created_on>2017-03-16 02:40:55</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>68674a5913a5760053dc51522244b021</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>url</sys_name>
+        <sys_package display_value="Watcher" source="x_kasp_watcher">8eb44d282bad620045eeaacc17da152f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Watcher">8eb44d282bad620045eeaacc17da152f</sys_scope>
+        <sys_update_name>sys_ui_policy_action_68674a5913a5760053dc51522244b021</sys_update_name>
+        <sys_updated_by>sebgar01</sys_updated_by>
+        <sys_updated_on>2017-03-16 02:40:55</sys_updated_on>
+        <table>x_kasp_watcher_monitors</table>
+        <ui_policy display_value="Show URL Field">0747025913a5760053dc51522244b023</ui_policy>
+        <visible>true</visible>
+    </sys_ui_policy_action>
+</record_update>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sysauto_script">
+    <sysauto_script action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <condition/>
+        <conditional>false</conditional>
+        <name>Watcher On Demand History Cleanup</name>
+        <run_as display_value="Sebastian Gonzalez-Garcia">96e7c5caf58e0100649946d7569884b1</run_as>
+        <run_as_tz/>
+        <run_dayofmonth>1</run_dayofmonth>
+        <run_dayofweek>1</run_dayofweek>
+        <run_period/>
+        <run_start>2017-01-12 15:34:02</run_start>
+        <run_time>1970-01-01 05:00:00</run_time>
+        <run_type>on_demand</run_type>
+        <script><![CDATA[(function(){
+	
+	/*
+	var hist = new GlideRecord('x_kasp_watcher_monitor_history');
+	hist.addEncodedQuery('sys_created_onONToday@javascript:gs.daysAgoStart(0)@javascript:gs.daysAgoEnd(0)');
+	hist.query();
+	while(hist.next()){
+		hist.deleteRecord();
+	}
+	*/
+	/**/
+	var monitor = new GlideRecord('x_kasp_watcher_monitors');
+	monitor.query();
+	var server;
+	
+	var today = new Date();
+	var year = today.getFullYear();
+	var month = ((today.getMonth()+1) < 10) ? "0" + (today.getMonth()+1):(today.getMonth() + 1);
+	var day = (today.getDate() < 10) ? "0" + today.getDate(): today.getDate();
+	
+	
+	var hourIndex = 0;
+	var hour;
+	var fullDate = year + '-' + month+ '-' +day;
+	var datePlusHour;
+	var log;
+	var hist;
+	var dateTime;
+	var hourly_reqs;
+	
+	var thisHour = today.getHours() + 3;
+	thisHour = (thisHour > 23) ? (thisHour - 24) : thisHour;
+	
+	
+	while(monitor.next()){
+		server = monitor.getValue('server');
+		
+		hourIndex = 0;
+		while(hourIndex <= thisHour){
+			
+			hour = (hourIndex < 10) ? "0"+hourIndex:hourIndex;
+			datePlusHour = fullDate + ' ' +hour;
+			log = new GlideRecord('x_kasp_watcher_server_logs');
+			log.addQuery('server',server);
+			log.addQuery('log_line','CONTAINS','Time span for online db request');
+			log.addQuery('timestamp','STARTSWITH',datePlusHour);
+			
+			log.query();
+			
+			hourly_reqs = 0;
+			
+			while(log.next()){
+				hourly_reqs++;
+				dateTime = log.getValue('timestamp').split(' ');
+			}
+			
+			hist = new GlideRecord('x_kasp_watcher_monitor_history');
+			hist.setValue('monitor',monitor.sys_id);
+			hist.setValue('type', monitor.getValue('type'));
+			hist.setValue('status',monitor.getValue('status'));
+			hist.setValue('server',monitor.getValue('server'));
+			hist.setValue('active_connections', monitor.getValue('active_connections'));
+			hist.setValue('ram',monitor.getValue('ram_mb'));
+			hist.setValue('disk', monitor.getValue('free_disk_space'));
+			hist.setValue('avg_db_request_time',monitor.getValue('avg_db_request_time'));
+			hist.setValue('db_requests',monitor.getValue('db_requests'));
+			hist.setValue('cert_expiration',monitor.getValue('cert_expiration'));
+			hist.setValue('hourly_db_requests',hour +":"+hourly_reqs);
+			
+			
+			hist.setValue('date',fullDate);
+			hist.setValue('time', hour+":30:00");
+			
+			hist.insert();
+			
+			//gs.info('Inserting History ' + server + " hour " + hour + " reqs " + hourly_reqs);
+			hourIndex++;
+		}
+	}
+	
+})();]]></script>
+        <sys_class_name>sysauto_script</sys_class_name>
+        <sys_created_by>sebgar01</sys_created_by>
+        <sys_created_on>2017-01-12 15:34:18</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>513c545d0f94f2044789e34be1050eef</sys_id>
+        <sys_mod_count>34</sys_mod_count>
+        <sys_name>Watcher On Demand History Cleanup</sys_name>
+        <sys_package display_value="Watcher" source="x_kasp_watcher">8eb44d282bad620045eeaacc17da152f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Watcher">8eb44d282bad620045eeaacc17da152f</sys_scope>
+        <sys_update_name>sysauto_script_513c545d0f94f2044789e34be1050eef</sys_update_name>
+        <sys_updated_by>sebgar01</sys_updated_by>
+        <sys_updated_on>2017-03-16 02:49:30</sys_updated_on>
+        <upgrade_safe>false</upgrade_safe>
+    </sysauto_script>
+</record_update>

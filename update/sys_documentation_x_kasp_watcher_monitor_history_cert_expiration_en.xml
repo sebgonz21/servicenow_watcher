@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update>
+    <sys_documentation element="cert_expiration" label="Cert Expiration" language="en" table="x_kasp_watcher_monitor_history">
+        <sys_documentation action="INSERT_OR_UPDATE">
+            <element>cert_expiration</element>
+            <help/>
+            <hint/>
+            <label>Cert Expiration</label>
+            <language>en</language>
+            <name>x_kasp_watcher_monitor_history</name>
+            <plural>Cert Expirations</plural>
+            <sys_class_name>sys_documentation</sys_class_name>
+            <sys_created_by>sebgar01</sys_created_by>
+            <sys_created_on>2017-01-05 21:28:28</sys_created_on>
+            <sys_customer_update>false</sys_customer_update>
+            <sys_id>893a6d430f4c76c04789e34be1050e6a</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_name>Cert Expiration</sys_name>
+            <sys_package display_value="Watcher" source="x_kasp_watcher">8eb44d282bad620045eeaacc17da152f</sys_package>
+            <sys_policy/>
+            <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+            <sys_scope display_value="Watcher">8eb44d282bad620045eeaacc17da152f</sys_scope>
+            <sys_update_name>sys_documentation_x_kasp_watcher_monitor_history_cert_expiration_en</sys_update_name>
+            <sys_updated_by>sebgar01</sys_updated_by>
+            <sys_updated_on>2017-01-05 21:28:28</sys_updated_on>
+            <url/>
+            <url_target/>
+        </sys_documentation>
+    </sys_documentation>
+</record_update>

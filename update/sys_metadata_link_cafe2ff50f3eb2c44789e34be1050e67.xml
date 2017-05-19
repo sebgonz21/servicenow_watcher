@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_metadata_link">
+    <sys_metadata_link action="INSERT_OR_UPDATE">
+        <directory>update</directory>
+        <documentkey>8193c4e92bade20045eeaacc17da1538</documentkey>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="x_kasp_watcher_monitors">
+    <x_kasp_watcher_monitors action="INSERT_OR_UPDATE">
+        <active_connections>43</active_connections>
+        <application>Locate</application>
+        <avg_db_request_time>0.024</avg_db_request_time>
+        <behind_firewall>false</behind_firewall>
+        <cert_expiration>2020-01-10</cert_expiration>
+        <certificate>true</certificate>
+        <certificate_path>C:/Locate/SSL/LocateCert2020.cer</certificate_path>
+        <cpu>{"idle_time":97}</cpu>
+        <cpu_util>8 %</cpu_util>
+        <db_requests>1096</db_requests>
+        <drives>[{"letter":"C:","total_size":42580570112,"free_disk":14383017984},{"letter":"D:","total_size":42946523136,"free_disk":42849570816}]</drives>
+        <environment>production</environment>
+        <free_disk>14.83 GB</free_disk>
+        <free_disk_space>37.30</free_disk_space>
+        <free_ram>4.99 GB</free_ram>
+        <group>external</group>
+        <hourly_requests>22:22</hourly_requests>
+        <http>true</http>
+        <last_check>2017-05-18 22:46:00</last_check>
+        <log_file>C:/Locate/server/logs/application.log</log_file>
+        <logs>true</logs>
+        <monitor>true</monitor>
+        <network>{"bytes_rec_psec":504388,"bytes_sent_psec":33817,"bandwidth":10000000000}</network>
+        <os>{"name_ver":"Microsoft Windows Server 2012 R2 Standard"}</os>
+        <performance>true</performance>
+        <ram>{"free_ram":5220520,"total_ram":8388148}</ram>
+        <ram_mb>5067</ram_mb>
+        <restart_app>true</restart_app>
+        <server>vusasecloc08</server>
+        <status>200</status>
+        <sys_created_by>sebgar01</sys_created_by>
+        <sys_created_on>2016-08-29 15:32:18</sys_created_on>
+        <sys_id>8193c4e92bade20045eeaacc17da1538</sys_id>
+        <sys_mod_count>760344</sys_mod_count>
+        <sys_updated_by>sys_admin</sys_updated_by>
+        <sys_updated_on>2017-05-19 02:48:27</sys_updated_on>
+        <total_disk>39.66 GB</total_disk>
+        <total_ram>8.00 GB</total_ram>
+        <type>http</type>
+        <url>https://vusasecloc08.katespade.com:8443/LocateUI/</url>
+    </x_kasp_watcher_monitors>
+</record_update>
+]]></payload>
+        <sys_class_name>sys_metadata_link</sys_class_name>
+        <sys_created_by>sebgar01</sys_created_by>
+        <sys_created_on>2017-05-19 02:48:48</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>cafe2ff50f3eb2c44789e34be1050e67</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>vusasecloc08</sys_name>
+        <sys_package display_value="Watcher" source="x_kasp_watcher">8eb44d282bad620045eeaacc17da152f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Watcher">8eb44d282bad620045eeaacc17da152f</sys_scope>
+        <sys_update_name>sys_metadata_link_cafe2ff50f3eb2c44789e34be1050e67</sys_update_name>
+        <sys_updated_by>sebgar01</sys_updated_by>
+        <sys_updated_on>2017-05-19 02:48:48</sys_updated_on>
+        <tablename>x_kasp_watcher_monitors</tablename>
+    </sys_metadata_link>
+</record_update>

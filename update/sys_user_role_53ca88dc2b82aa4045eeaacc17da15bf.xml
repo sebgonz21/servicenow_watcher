@@ -4,6 +4,7 @@
         <assignable_by/>
         <description/>
         <elevated_privilege>false</elevated_privilege>
+        <encryption_context/>
         <grantable>true</grantable>
         <includes_roles/>
         <name>x_kasp_watcher_monitor_history_user</name>

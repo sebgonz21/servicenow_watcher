@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_metadata_link">
+    <sys_metadata_link action="INSERT_OR_UPDATE">
+        <directory>update</directory>
+        <documentkey>a133ccae13a56a0053dc51522244b0ec</documentkey>
+        <payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="x_kasp_watcher_monitors">
+    <x_kasp_watcher_monitors action="INSERT_OR_UPDATE">
+        <active_connections>17</active_connections>
+        <application>Locate</application>
+        <avg_db_request_time>NaN</avg_db_request_time>
+        <behind_firewall>false</behind_firewall>
+        <cert_expiration>2020-01-10</cert_expiration>
+        <certificate>false</certificate>
+        <certificate_path/>
+        <cpu>{"idle_time":96}</cpu>
+        <cpu_util>2 %</cpu_util>
+        <db_requests>0</db_requests>
+        <drives>[{"letter":"C:","total_size":42842714112,"free_disk":6716243968}]</drives>
+        <environment>test</environment>
+        <free_disk>6.05 GB</free_disk>
+        <free_disk_space>15.20</free_disk_space>
+        <free_ram>2.95 GB</free_ram>
+        <group/>
+        <hourly_requests>14:0</hourly_requests>
+        <http>false</http>
+        <last_check>2017-02-13 14:50:03</last_check>
+        <log_file/>
+        <logs>false</logs>
+        <monitor>false</monitor>
+        <network>{"bytes_rec_psec":1193,"bytes_sent_psec":4782,"bandwidth":10000000000}</network>
+        <os>{"name_ver":"Microsoft Windows Server 2008 R2 Standard  Service Pack 1"}</os>
+        <performance>false</performance>
+        <ram>{"free_ram":2932440,"total_ram":4193784}</ram>
+        <ram_mb>2687</ram_mb>
+        <restart_app>false</restart_app>
+        <server>vusatstmlo02</server>
+        <status>200</status>
+        <sys_created_by>sebgar01</sys_created_by>
+        <sys_created_on>2016-09-01 18:04:42</sys_created_on>
+        <sys_id>a133ccae13a56a0053dc51522244b0ec</sys_id>
+        <sys_mod_count>439331</sys_mod_count>
+        <sys_updated_by>sebgar01</sys_updated_by>
+        <sys_updated_on>2017-02-13 19:50:29</sys_updated_on>
+        <total_disk>39.90 GB</total_disk>
+        <total_ram>4.00 GB</total_ram>
+        <type>http</type>
+        <url/>
+    </x_kasp_watcher_monitors>
+</record_update>
+]]></payload>
+        <sys_class_name>sys_metadata_link</sys_class_name>
+        <sys_created_by>sebgar01</sys_created_by>
+        <sys_created_on>2017-05-19 02:48:48</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>4efe2ff50f3eb2c44789e34be1050e68</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>vusatstmlo02</sys_name>
+        <sys_package display_value="Watcher" source="x_kasp_watcher">8eb44d282bad620045eeaacc17da152f</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Watcher">8eb44d282bad620045eeaacc17da152f</sys_scope>
+        <sys_update_name>sys_metadata_link_4efe2ff50f3eb2c44789e34be1050e68</sys_update_name>
+        <sys_updated_by>sebgar01</sys_updated_by>
+        <sys_updated_on>2017-05-19 02:48:48</sys_updated_on>
+        <tablename>x_kasp_watcher_monitors</tablename>
+    </sys_metadata_link>
+</record_update>

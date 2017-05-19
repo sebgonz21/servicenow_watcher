@@ -835,6 +835,54 @@ watcher.factory('datePickerAPI',function(){
 			<div class=" col-lg-12 col-md-12 col-sm-12">
 				<h3>Production</h3>
 				
+				
+				
+				<!-- EXTERNAL -->
+				<div id="external_group" class="server_group col-lg-11 col-md-11 col-sm-11">
+					<h4 class="group_title">Ecomm</h4>
+					
+					<div class="my-container col-lg-15 col-md-15 col-sm-15" ng-repeat="exter in external">
+						<server-monitor env="production" server="{{exter.server}}" monitor_id="{{exter.sys_id}}"></server-monitor>
+
+						<!-- Modal -->
+
+						<div id="{{exter.server}}_modal"  class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+						  <div  class="modal-dialog modal-sm">
+							<div class="modal-content">
+								<p class="modal_title">{{exter.server}}</p>
+
+								<div id="{{exter.server}}_logs"></div>
+							</div>
+						  </div>
+						</div>
+						<!-- Modal -->
+						<div class="modal fade" id="confirmModal_{{exter.server}}" role="dialog">
+							<div class="modal-dialog">
+
+							  <div class="modal-content">
+								<div class="modal-header confirm-header">
+								  <button type="button" class="close btn-default" data-dismiss="modal">X</button>
+								  <h3 class="modal-title">Are You Sure?</h3>
+
+								</div>
+								<div class="modal-body">
+									 <h4>Clicking "Yes" will Restart the Locate Application</h4>
+
+								</div>
+								<div class="modal-footer">
+								  <button id="confirm_close_{{exter.server}}" class="btn-default confirm_restart" data-dismiss="modal">Yes</button>
+								  <button class="btn-default" data-dismiss="modal">No</button>
+								</div>
+							  </div>
+
+							</div>
+						</div>
+
+					</div>
+					
+				</div>
+				<!-- EXTERNAL -->
+				
 				<!-- PRIMARY -->
 				<div id="primary_group" class="server_group col-lg-3 col-md-3 col-sm-12">
 					<h4 class="group_title">Primary</h4>
@@ -923,52 +971,6 @@ watcher.factory('datePickerAPI',function(){
 					</div>
 				</div>
 				<!-- INTERNAL -->
-				
-				<!-- EXTERNAL -->
-				<div id="external_group" class="server_group col-lg-11 col-md-11 col-sm-11">
-					<h4 class="group_title">Ecomm</h4>
-					
-					<div class="my-container col-lg-15 col-md-15 col-sm-15" ng-repeat="exter in external">
-						<server-monitor env="production" server="{{exter.server}}" monitor_id="{{exter.sys_id}}"></server-monitor>
-
-						<!-- Modal -->
-
-						<div id="{{exter.server}}_modal"  class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-						  <div  class="modal-dialog modal-sm">
-							<div class="modal-content">
-								<p class="modal_title">{{exter.server}}</p>
-
-								<div id="{{exter.server}}_logs"></div>
-							</div>
-						  </div>
-						</div>
-						<!-- Modal -->
-						<div class="modal fade" id="confirmModal_{{exter.server}}" role="dialog">
-							<div class="modal-dialog">
-
-							  <div class="modal-content">
-								<div class="modal-header confirm-header">
-								  <button type="button" class="close btn-default" data-dismiss="modal">X</button>
-								  <h3 class="modal-title">Are You Sure?</h3>
-
-								</div>
-								<div class="modal-body">
-									 <h4>Clicking "Yes" will Restart the Locate Application</h4>
-
-								</div>
-								<div class="modal-footer">
-								  <button id="confirm_close_{{exter.server}}" class="btn-default confirm_restart" data-dismiss="modal">Yes</button>
-								  <button class="btn-default" data-dismiss="modal">No</button>
-								</div>
-							  </div>
-
-							</div>
-						</div>
-
-					</div>
-					
-				</div>
-				<!-- EXTERNAL -->
 				
 				<!-- AVAILABLE -->
 				<div id="available_group" class="server_group col-lg-3 col-md-3 col-sm-12">
@@ -1062,7 +1064,7 @@ watcher.factory('datePickerAPI',function(){
         <sys_created_on>2016-08-29 12:51:22</sys_created_on>
         <sys_customer_update>true</sys_customer_update>
         <sys_id>ca5cdfd52ba9e20045eeaacc17da154f</sys_id>
-        <sys_mod_count>959</sys_mod_count>
+        <sys_mod_count>960</sys_mod_count>
         <sys_name>locate_monitor_page</sys_name>
         <sys_package display_value="Watcher" source="x_kasp_watcher">8eb44d282bad620045eeaacc17da152f</sys_package>
         <sys_policy/>
@@ -1070,6 +1072,6 @@ watcher.factory('datePickerAPI',function(){
         <sys_scope display_value="Watcher">8eb44d282bad620045eeaacc17da152f</sys_scope>
         <sys_update_name>sys_ui_page_ca5cdfd52ba9e20045eeaacc17da154f</sys_update_name>
         <sys_updated_by>sebgar01</sys_updated_by>
-        <sys_updated_on>2017-03-13 17:46:28</sys_updated_on>
+        <sys_updated_on>2017-05-16 13:46:47</sys_updated_on>
     </sys_ui_page>
 </record_update>

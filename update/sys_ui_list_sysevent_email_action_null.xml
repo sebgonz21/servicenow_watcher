@@ -4,182 +4,152 @@
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
             <element>name</element>
-            <list_id display_value="sysevent_email_action" element="NULL" name="sysevent_email_action" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">4bc9b204972311003b0d10d4ab297522</list_id>
+            <list_id display_value="sysevent_email_action" element="NULL" name="sysevent_email_action" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">3fbf86410ffe3e844789e34be1050ede</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
             <position>0</position>
             <sum>false</sum>
-            <sys_created_by>maint</sys_created_by>
-            <sys_created_on>2014-03-14 18:07:18</sys_created_on>
-            <sys_id>03c9b204972311003b0d10d4ab297523</sys_id>
+            <sys_created_by>dipsha01</sys_created_by>
+            <sys_created_on>2017-05-16 11:57:19</sys_created_on>
+            <sys_id>33bf86410ffe3e844789e34be1050edf</sys_id>
             <sys_mod_count>0</sys_mod_count>
-            <sys_updated_by>maint</sys_updated_by>
-            <sys_updated_on>2014-03-14 18:07:18</sys_updated_on>
-        </sys_ui_list_element>
-        <sys_ui_list_element action="INSERT_OR_UPDATE">
-            <average_value>false</average_value>
-            <element>active</element>
-            <list_id display_value="sysevent_email_action" element="NULL" name="sysevent_email_action" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">4bc9b204972311003b0d10d4ab297522</list_id>
-            <max_value>false</max_value>
-            <min_value>false</min_value>
-            <position>1</position>
-            <sum>false</sum>
-            <sys_created_by>maint</sys_created_by>
-            <sys_created_on>2014-03-14 18:07:18</sys_created_on>
-            <sys_id>43c9b204972311003b0d10d4ab297523</sys_id>
-            <sys_mod_count>0</sys_mod_count>
-            <sys_updated_by>maint</sys_updated_by>
-            <sys_updated_on>2014-03-14 18:07:18</sys_updated_on>
-        </sys_ui_list_element>
-        <sys_ui_list_element action="INSERT_OR_UPDATE">
-            <average_value>false</average_value>
-            <element>collection</element>
-            <list_id display_value="sysevent_email_action" element="NULL" name="sysevent_email_action" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">4bc9b204972311003b0d10d4ab297522</list_id>
-            <max_value>false</max_value>
-            <min_value>false</min_value>
-            <position>2</position>
-            <sum>false</sum>
-            <sys_created_by>maint</sys_created_by>
-            <sys_created_on>2014-03-14 18:07:18</sys_created_on>
-            <sys_id>83c9b204972311003b0d10d4ab297523</sys_id>
-            <sys_mod_count>0</sys_mod_count>
-            <sys_updated_by>maint</sys_updated_by>
-            <sys_updated_on>2014-03-14 18:07:18</sys_updated_on>
-        </sys_ui_list_element>
-        <sys_ui_list_element action="INSERT_OR_UPDATE">
-            <average_value>false</average_value>
-            <element>template</element>
-            <list_id display_value="sysevent_email_action" element="NULL" name="sysevent_email_action" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">4bc9b204972311003b0d10d4ab297522</list_id>
-            <max_value>false</max_value>
-            <min_value>false</min_value>
-            <position>3</position>
-            <sum>false</sum>
-            <sys_created_by>maint</sys_created_by>
-            <sys_created_on>2014-03-14 18:07:18</sys_created_on>
-            <sys_id>c3c9b204972311003b0d10d4ab297523</sys_id>
-            <sys_mod_count>0</sys_mod_count>
-            <sys_updated_by>maint</sys_updated_by>
-            <sys_updated_on>2014-03-14 18:07:18</sys_updated_on>
-        </sys_ui_list_element>
-        <sys_ui_list_element action="INSERT_OR_UPDATE">
-            <average_value>false</average_value>
-            <element>condition</element>
-            <list_id display_value="sysevent_email_action" element="NULL" name="sysevent_email_action" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">4bc9b204972311003b0d10d4ab297522</list_id>
-            <max_value>false</max_value>
-            <min_value>false</min_value>
-            <position>4</position>
-            <sum>false</sum>
-            <sys_created_by>maint</sys_created_by>
-            <sys_created_on>2014-03-14 18:07:18</sys_created_on>
-            <sys_id>07c9b204972311003b0d10d4ab297523</sys_id>
-            <sys_mod_count>0</sys_mod_count>
-            <sys_updated_by>maint</sys_updated_by>
-            <sys_updated_on>2014-03-14 18:07:18</sys_updated_on>
-        </sys_ui_list_element>
-        <sys_ui_list_element action="INSERT_OR_UPDATE">
-            <average_value>false</average_value>
-            <element>description</element>
-            <list_id display_value="sysevent_email_action" element="NULL" name="sysevent_email_action" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">4bc9b204972311003b0d10d4ab297522</list_id>
-            <max_value>false</max_value>
-            <min_value>false</min_value>
-            <position>5</position>
-            <sum>false</sum>
-            <sys_created_by>maint</sys_created_by>
-            <sys_created_on>2014-03-14 18:07:18</sys_created_on>
-            <sys_id>47c9b204972311003b0d10d4ab297523</sys_id>
-            <sys_mod_count>0</sys_mod_count>
-            <sys_updated_by>maint</sys_updated_by>
-            <sys_updated_on>2014-03-14 18:07:18</sys_updated_on>
-        </sys_ui_list_element>
-        <sys_ui_list_element action="INSERT_OR_UPDATE">
-            <average_value>false</average_value>
-            <element>recipient_fields</element>
-            <list_id display_value="sysevent_email_action" element="NULL" name="sysevent_email_action" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">4bc9b204972311003b0d10d4ab297522</list_id>
-            <max_value>false</max_value>
-            <min_value>false</min_value>
-            <position>6</position>
-            <sum>false</sum>
-            <sys_created_by>maint</sys_created_by>
-            <sys_created_on>2014-03-14 18:07:18</sys_created_on>
-            <sys_id>87c9b204972311003b0d10d4ab297523</sys_id>
-            <sys_mod_count>0</sys_mod_count>
-            <sys_updated_by>maint</sys_updated_by>
-            <sys_updated_on>2014-03-14 18:07:18</sys_updated_on>
-        </sys_ui_list_element>
-        <sys_ui_list_element action="INSERT_OR_UPDATE">
-            <average_value>false</average_value>
-            <element>recipient_users</element>
-            <list_id display_value="sysevent_email_action" element="NULL" name="sysevent_email_action" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">4bc9b204972311003b0d10d4ab297522</list_id>
-            <max_value>false</max_value>
-            <min_value>false</min_value>
-            <position>7</position>
-            <sum>false</sum>
-            <sys_created_by>maint</sys_created_by>
-            <sys_created_on>2014-03-14 18:07:18</sys_created_on>
-            <sys_id>c7c9b204972311003b0d10d4ab297523</sys_id>
-            <sys_mod_count>0</sys_mod_count>
-            <sys_updated_by>maint</sys_updated_by>
-            <sys_updated_on>2014-03-14 18:07:18</sys_updated_on>
-        </sys_ui_list_element>
-        <sys_ui_list_element action="INSERT_OR_UPDATE">
-            <average_value>false</average_value>
-            <element>recipient_groups</element>
-            <list_id display_value="sysevent_email_action" element="NULL" name="sysevent_email_action" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">4bc9b204972311003b0d10d4ab297522</list_id>
-            <max_value>false</max_value>
-            <min_value>false</min_value>
-            <position>8</position>
-            <sum>false</sum>
-            <sys_created_by>maint</sys_created_by>
-            <sys_created_on>2014-03-14 18:07:18</sys_created_on>
-            <sys_id>0bc9b204972311003b0d10d4ab297523</sys_id>
-            <sys_mod_count>0</sys_mod_count>
-            <sys_updated_by>maint</sys_updated_by>
-            <sys_updated_on>2014-03-14 18:07:18</sys_updated_on>
+            <sys_updated_by>dipsha01</sys_updated_by>
+            <sys_updated_on>2017-05-16 11:57:19</sys_updated_on>
         </sys_ui_list_element>
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
             <element>action_insert</element>
-            <list_id display_value="sysevent_email_action" element="NULL" name="sysevent_email_action" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">4bc9b204972311003b0d10d4ab297522</list_id>
+            <list_id display_value="sysevent_email_action" element="NULL" name="sysevent_email_action" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">3fbf86410ffe3e844789e34be1050ede</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
-            <position>9</position>
+            <position>1</position>
             <sum>false</sum>
-            <sys_created_by>maint</sys_created_by>
-            <sys_created_on>2014-03-14 18:07:18</sys_created_on>
-            <sys_id>4bc9b204972311003b0d10d4ab297523</sys_id>
+            <sys_created_by>dipsha01</sys_created_by>
+            <sys_created_on>2017-05-16 11:57:19</sys_created_on>
+            <sys_id>b3bf86410ffe3e844789e34be1050edf</sys_id>
             <sys_mod_count>0</sys_mod_count>
-            <sys_updated_by>maint</sys_updated_by>
-            <sys_updated_on>2014-03-14 18:07:18</sys_updated_on>
+            <sys_updated_by>dipsha01</sys_updated_by>
+            <sys_updated_on>2017-05-16 11:57:19</sys_updated_on>
         </sys_ui_list_element>
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
             <element>action_update</element>
-            <list_id display_value="sysevent_email_action" element="NULL" name="sysevent_email_action" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">4bc9b204972311003b0d10d4ab297522</list_id>
+            <list_id display_value="sysevent_email_action" element="NULL" name="sysevent_email_action" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">3fbf86410ffe3e844789e34be1050ede</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
-            <position>10</position>
+            <position>2</position>
             <sum>false</sum>
-            <sys_created_by>maint</sys_created_by>
-            <sys_created_on>2014-03-14 18:07:18</sys_created_on>
-            <sys_id>8bc9b204972311003b0d10d4ab297523</sys_id>
+            <sys_created_by>dipsha01</sys_created_by>
+            <sys_created_on>2017-05-16 11:57:19</sys_created_on>
+            <sys_id>37bf86410ffe3e844789e34be1050edf</sys_id>
             <sys_mod_count>0</sys_mod_count>
-            <sys_updated_by>maint</sys_updated_by>
-            <sys_updated_on>2014-03-14 18:07:18</sys_updated_on>
+            <sys_updated_by>dipsha01</sys_updated_by>
+            <sys_updated_on>2017-05-16 11:57:19</sys_updated_on>
         </sys_ui_list_element>
         <sys_ui_list_element action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
-            <element>order</element>
-            <list_id display_value="sysevent_email_action" element="NULL" name="sysevent_email_action" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">4bc9b204972311003b0d10d4ab297522</list_id>
+            <element>active</element>
+            <list_id display_value="sysevent_email_action" element="NULL" name="sysevent_email_action" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">3fbf86410ffe3e844789e34be1050ede</list_id>
             <max_value>false</max_value>
             <min_value>false</min_value>
-            <position>11</position>
+            <position>3</position>
             <sum>false</sum>
-            <sys_created_by>maint</sys_created_by>
-            <sys_created_on>2014-03-14 18:07:18</sys_created_on>
-            <sys_id>cbc9b204972311003b0d10d4ab297523</sys_id>
+            <sys_created_by>dipsha01</sys_created_by>
+            <sys_created_on>2017-05-16 11:57:19</sys_created_on>
+            <sys_id>b7bf86410ffe3e844789e34be1050edf</sys_id>
             <sys_mod_count>0</sys_mod_count>
-            <sys_updated_by>maint</sys_updated_by>
-            <sys_updated_on>2014-03-14 18:07:18</sys_updated_on>
+            <sys_updated_by>dipsha01</sys_updated_by>
+            <sys_updated_on>2017-05-16 11:57:19</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>advanced_condition</element>
+            <list_id display_value="sysevent_email_action" element="NULL" name="sysevent_email_action" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">3fbf86410ffe3e844789e34be1050ede</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>4</position>
+            <sum>false</sum>
+            <sys_created_by>dipsha01</sys_created_by>
+            <sys_created_on>2017-05-16 11:57:19</sys_created_on>
+            <sys_id>3bbf86410ffe3e844789e34be1050edf</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>dipsha01</sys_updated_by>
+            <sys_updated_on>2017-05-16 11:57:19</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>affected_field_on_event</element>
+            <list_id display_value="sysevent_email_action" element="NULL" name="sysevent_email_action" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">3fbf86410ffe3e844789e34be1050ede</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>5</position>
+            <sum>false</sum>
+            <sys_created_by>dipsha01</sys_created_by>
+            <sys_created_on>2017-05-16 11:57:19</sys_created_on>
+            <sys_id>bbbf86410ffe3e844789e34be1050edf</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>dipsha01</sys_updated_by>
+            <sys_updated_on>2017-05-16 11:57:19</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>collection</element>
+            <list_id display_value="sysevent_email_action" element="NULL" name="sysevent_email_action" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">3fbf86410ffe3e844789e34be1050ede</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>6</position>
+            <sum>false</sum>
+            <sys_created_by>dipsha01</sys_created_by>
+            <sys_created_on>2017-05-16 11:57:19</sys_created_on>
+            <sys_id>3fbf86410ffe3e844789e34be1050edf</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>dipsha01</sys_updated_by>
+            <sys_updated_on>2017-05-16 11:57:19</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>condition</element>
+            <list_id display_value="sysevent_email_action" element="NULL" name="sysevent_email_action" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">3fbf86410ffe3e844789e34be1050ede</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>7</position>
+            <sum>false</sum>
+            <sys_created_by>dipsha01</sys_created_by>
+            <sys_created_on>2017-05-16 11:57:19</sys_created_on>
+            <sys_id>bfbf86410ffe3e844789e34be1050edf</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>dipsha01</sys_updated_by>
+            <sys_updated_on>2017-05-16 11:57:19</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>content_type</element>
+            <list_id display_value="sysevent_email_action" element="NULL" name="sysevent_email_action" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">3fbf86410ffe3e844789e34be1050ede</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>8</position>
+            <sum>false</sum>
+            <sys_created_by>dipsha01</sys_created_by>
+            <sys_created_on>2017-05-16 11:57:19</sys_created_on>
+            <sys_id>33bf86410ffe3e844789e34be1050ee0</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>dipsha01</sys_updated_by>
+            <sys_updated_on>2017-05-16 11:57:19</sys_updated_on>
+        </sys_ui_list_element>
+        <sys_ui_list_element action="INSERT_OR_UPDATE">
+            <average_value>false</average_value>
+            <element>description</element>
+            <list_id display_value="sysevent_email_action" element="NULL" name="sysevent_email_action" parent="NULL" relationship="NULL" sys_domain="global" view="Default view">3fbf86410ffe3e844789e34be1050ede</list_id>
+            <max_value>false</max_value>
+            <min_value>false</min_value>
+            <position>9</position>
+            <sum>false</sum>
+            <sys_created_by>dipsha01</sys_created_by>
+            <sys_created_on>2017-05-16 11:57:19</sys_created_on>
+            <sys_id>b3bf86410ffe3e844789e34be1050ee0</sys_id>
+            <sys_mod_count>0</sys_mod_count>
+            <sys_updated_by>dipsha01</sys_updated_by>
+            <sys_updated_on>2017-05-16 11:57:19</sys_updated_on>
         </sys_ui_list_element>
         <sys_ui_list action="INSERT_OR_UPDATE">
             <average_value>false</average_value>
